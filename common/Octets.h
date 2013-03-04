@@ -9,6 +9,9 @@ namespace common
 class Octets
 {
 public:
+	Octets();
+	Octets(size_t size);
+	~Octets();
 private:
 };
 
