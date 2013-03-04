@@ -1,6 +1,8 @@
 #ifndef OCTETS_H
 #define OCTETS_H
 
+#include <cstddef>
+
 namespace catman
 {
 namespace common
@@ -12,6 +14,9 @@ class Octets
 	{
 	public:
 		Rep();
+		size_t capacity() const;
+		size_t size() const;
+		void setSize(size_t newSize);
 		void incRef();
 		void decRef();
 		void* data();
@@ -22,13 +27,14 @@ class Octets
 		Rep* clone();
 		static size_t alignSize(size_t size);
 		static void* operator new(size_t size, size_t extra);
-		static void* operator delete(void *p);
+		static void operator delete(void *p);
 	public:
+		static Rep null;
+	private:
 		size_t m_capacity;
 		size_t m_size;
 		size_t m_ref;
 		
-		static Rep null;
 	};
 public:
 	Octets();
@@ -38,8 +44,8 @@ public:
 	Octets(const Octets &other);
 	virtual ~Octets();
 	Octets& operator = (const Octets &other);
-	bool operator == (const Octets &other);
-	bool operator != (const Octets &other);
+	bool operator == (const Octets &other) const;
+	bool operator != (const Octets &other) const;
 	Octets& swap(Octets &other);
 	void* begin();
 	void* end();
@@ -52,10 +58,10 @@ public:
 	Octets& erase(void *beginPos, void *endPos);
 	Octets& insert(void *pos, const void *buff, size_t len);
 	Octets& insert(void *pos, const void *beginPos, const void *endPos);
+	Octets& reserve(size_t size);
 	Octets& resize(size_t size);
 private:
-	Rep *rep() const;
-	void unique();
+	Rep* rep() const;
 private:
 	void *m_base;
 };
