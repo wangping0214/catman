@@ -1,28 +1,18 @@
 CXX = g++
 FLAGS = -ggdb -Wall
-OBJS = main.o
+INCLUDES = -I. -I./common -I./net
 LIBS = -lpthread
+CPPFILES = $(wildcard ./common/*.cpp) $(wildcard ./net/*.cpp)
+OBJS = $(patsubst %.cpp,%.,$(CPPFILES))
+LIB : libcatman.so
 
-main : main.o
-	${CXX} ${FLAGS} -o $@ ${OBJS} ${LIBS}
+all : $(LIB)
 
-mutex_demo : mutex_demo.o
-	${CXX} ${FLAGS} -o $@ mutex_demo.o ${LIBS}
-
-stack_management : stack_management.o
-	${CXX} ${FLAGS} -o $@ stack_management.o ${LIBS}
-
-main.o : main.cpp
-	${CXX} ${FLAGS} -c main.cpp
-
-mutex_demo.o : mutex_demo.cpp
-	${CXX} ${FLAGS} -c mutex_demo.cpp
-
-stack_management.o : stack_management.cpp
-	${CXX} ${FLAGS} -c stack_management.cpp
+libcatman.so : $(OBJS)
+	${CXX} -fPIC --shared -o $(LIB) $(OBJS)
 
 *.o : *.cpp
 	${CXX} ${FLAGS} -c $<
 
 clean :
-	rm -r ${OBJS}
+	rm -r $(OBJS) $(LIB)
