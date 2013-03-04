@@ -42,13 +42,21 @@ void Octets::Rep::setSize(size_t newSize)
 
 void Octets::Rep::incRef()
 {
+#ifdef _REENTRANT
+
+#else
 	++ m_ref;
+#endif
 }
 
 void Octets::Rep::decRef()
 {
+#ifdef _REENTRANT
+
+#else
 	if (-- m_ref == 0)
 		delete this;
+#endif
 }
 
 void* Octets::Rep::data()
