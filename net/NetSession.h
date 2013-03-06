@@ -1,7 +1,7 @@
 #ifndef NETSESSION_H
 #define NETSESSION_H
 
-#include "common/Octets.h"
+#include "Octets.h"
 
 namespace catman
 {
