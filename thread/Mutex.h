@@ -38,7 +38,7 @@ public:
 	MutexLocker(Mutex *mutexPtr);
 	~MutexLocker();
 private:
-	Mutex m_mutexPtr;
+	Mutex *m_mutexPtr;
 };
 
 }

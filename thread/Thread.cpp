@@ -9,6 +9,7 @@ static void* thread_start(void* ptr)
 {
 	Thread *threadPtr = (Thread*)ptr;
 	threadPtr->run();
+	return (void*)0;
 }
 
 Thread::Thread()
@@ -30,7 +31,7 @@ void Thread::start()
 
 void Thread::cancel()
 {
-	pthread_cancel(&m_threadId);
+	pthread_cancel(m_threadId);
 }
 
 }

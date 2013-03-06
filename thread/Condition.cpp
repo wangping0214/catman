@@ -12,7 +12,7 @@ Condition::Condition()
 
 Condition::~Condition()
 {
-	pthread_cond_destory(&m_cond);
+	pthread_cond_destroy(&m_cond);
 }
 
 bool Condition::wait(Mutex *mutexPtr)

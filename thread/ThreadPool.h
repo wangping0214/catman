@@ -18,8 +18,6 @@ namespace thread
 
 class ThreadPool
 {
-	typedef std::deque<Runnable*> RunnableQueue;
-	typedef std::vector<ThreadPoolThread*> ThreadVector; 
 	class ThreadPoolThread : public Thread
 	{
 	public:
@@ -31,9 +29,12 @@ class ThreadPool
 		ThreadPool *m_pool;
 		bool m_isStopped;
 	};
+	typedef std::deque<Runnable*> RunnableQueue;
+	typedef std::vector<ThreadPoolThread*> ThreadVector; 
 public:
 	explicit ThreadPool(size_t maximumPoolSize);
 	virtual ~ThreadPool();
+	virtual void start();
 	virtual void execute(Runnable *runnable);
 	size_t maximumPoolSize() const;
 private:

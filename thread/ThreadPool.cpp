@@ -1,4 +1,5 @@
 #include "ThreadPool.h"
+#include <unistd.h>
 
 namespace catman
 {
@@ -19,7 +20,7 @@ void ThreadPool::ThreadPoolThread::run()
 	{
 		Runnable *runnable = m_pool->fetchRunnable();
 		runnable->run();
-		delete runnable;
+		//delete runnable;
 	}
 }
 
@@ -32,24 +33,32 @@ void ThreadPool::ThreadPoolThread::stop()
 
 ThreadPool::ThreadPool(size_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize)
 {
-	for (size_t i = 0; i < maximumPoolSize; ++ i)
-	{
-		ThreadPoolThread *thread = new ThreadPoolThread(this);
-		m_activeThreads.push_back(thread);
-		thread->start();
-	}
 }
 
 ThreadPool::~ThreadPool()
 {
-	for (ThreadVector::const_iterator it = m_activeThreads.begin(), ie = m_activeThreads.end(); it != ie; ++ it)
+	for (ThreadVector::iterator it = m_activeThreads.begin(), ie = m_activeThreads.end(); it != ie; ++ it)
 	{
-		it->stop();
+		(*it)->stop();
 		delete *it;
 	}
 	// m_queueCondition.wakeAll();
 	// pthread_join all active threads
 	
+}
+
+void ThreadPool::start()
+{
+	for (size_t i = 0; i < m_maximumPoolSize; ++ i)
+	{
+		ThreadPoolThread *thread = new ThreadPoolThread(this);
+		m_activeThreads.push_back(thread);
+		thread->start();
+	}
+
+	// temporary
+	while (true)
+		sleep(1);
 }
 
 void ThreadPool::execute(Runnable *runnable)
@@ -69,7 +78,9 @@ Runnable* ThreadPool::fetchRunnable()
 	MutexLocker locker(&m_queueLock);
 	while (m_runnableQueue.empty())
 		m_queueCondition.wait(&m_queueLock);
-	return m_runnableQueue.pop_back();
+	Runnable *runnable = m_runnableQueue.back();
+	m_runnableQueue.pop_back();
+	return runnable;
 }
 
 }

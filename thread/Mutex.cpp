@@ -12,7 +12,7 @@ Mutex::Mutex(RecursiveType type)
 
 Mutex::~Mutex()
 {
-	pthread_mutex_destory(&m_mutex);
+	pthread_mutex_destroy(&m_mutex);
 }
 
 void Mutex::lock()
@@ -22,7 +22,7 @@ void Mutex::lock()
 
 bool Mutex::tryLock()
 {
-	pthread_mutex_trylock(&m_mutex);
+	return 0 == pthread_mutex_trylock(&m_mutex);
 }
 
 void Mutex::unlock()
