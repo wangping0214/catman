@@ -1,4 +1,4 @@
 catman
 ======
 
-catman is a net framework for on-line game
+catman is a network framework with which you can implement game server or game client easily.
