@@ -13,7 +13,7 @@ OctetsStream::OctetsStream(const Octets &data) : m_data(data), m_pos(0)
 {
 }
 
-OctetsStream::OctetsStream(const OctetsStream &other) : m_data(other.m_data), pos(0)
+OctetsStream::OctetsStream(const OctetsStream &other) : m_data(other.m_data), m_pos(0)
 {
 }
 
@@ -31,12 +31,12 @@ OctetsStream& OctetsStream::operator = (const OctetsStream &other)
 	return *this;
 }
 
-bool OctetsStream::operator == (const OctetsStream &other)
+bool OctetsStream::operator == (const OctetsStream &other) const
 {
-	return (this == &other) || (m_data == other.m_data)
+	return (this == &other) || (m_data == other.m_data);
 }
 
-bool OctetsStream::operator != (const OctetsStream &other)
+bool OctetsStream::operator != (const OctetsStream &other) const
 {
 	return ! operator ==(other);
 }
@@ -81,7 +81,7 @@ void OctetsStream::erase(size_t pos, size_t len)
 	m_data.erase(pos, len);
 } 
 
-void OctetsStream::erase(const void *beginPos, const void *endPos)
+void OctetsStream::erase(void *beginPos, void *endPos)
 {
 	m_data.erase(beginPos, endPos);
 }

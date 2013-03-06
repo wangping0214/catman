@@ -2,6 +2,7 @@
 #define PROTOCOL_H
 
 #include "Octets.h"
+#include "OctetsStream.h"
 #include <map>
 #include <cstddef>
 

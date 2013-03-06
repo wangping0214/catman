@@ -165,6 +165,7 @@ Octets& Octets::operator = (const Octets &other)
 		m_base = other.m_base;
 		rep()->incRef();
 	}
+	return *this;
 }
 
 bool Octets::operator == (const Octets &other) const
@@ -262,6 +263,7 @@ Octets& Octets::insert(void *pos, const void *buff, size_t len)
 		fast_memmove((char*)pos + len, pos, len);
 	fast_memmove(pos, buff, len);
 	rep()->setSize(rep()->size() + len);
+	return *this;
 }
 
 Octets& Octets::insert(void *pos, const void *beginPos, const void *endPos)

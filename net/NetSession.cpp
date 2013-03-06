@@ -16,6 +16,7 @@ NetSession::~NetSession()
 bool NetSession::send(common::Octets buff)
 {
 	m_outBuffer.insert(m_outBuffer.begin(), buff.begin(), buff.end());
+	return true;
 }
 
 void NetSession::onRecv()

@@ -36,14 +36,14 @@ public:
 private:
 	template<typename T> OctetsStream& pushBytes(T val)
 	{
-		m_data.insert(data.end(), &val, sizeof(T));
+		m_data.insert(m_data.end(), &val, sizeof(T));
 		return this;
 	}
 	template<typename T> OctetsStream& popBytes(T &val)
 	{
 		if (m_pos + sizeof(T) > m_data.size())
 			;
-		val = *(T*)((char*)m_data.begin() = pos);
+		val = *(T*)((char*)m_data.begin() + m_pos);
 		m_pos += sizeof(T);
 		return *this;
 	}

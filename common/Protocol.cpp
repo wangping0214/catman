@@ -5,6 +5,8 @@ namespace catman
 namespace common
 {
 
+Protocol::TypeProtocolMap Protocol::protocolStubs;
+
 Protocol::Protocol(size_t type) : m_type(type)
 {
 	if (getStub(type) == NULL)
@@ -32,16 +34,18 @@ size_t Protocol::type() const
 void Protocol::encode(OctetsStream &stream) const
 {
 	OctetsStream data;
-	data << *this;
-	stream << m_type << data;
+	//data << *this;
+	//stream << m_type << data;
 }
 
 Octets Protocol::encode() const
 {
+	return Octets();
 }
 
 Octets Protocol::encode() 
 {
+	return Octets();
 }
 
 Protocol* Protocol::decode(OctetsStream &stream)
