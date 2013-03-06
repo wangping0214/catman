@@ -16,3 +16,4 @@ libcatman.so : $(OBJS)
 
 clean :
 	rm -r $(OBJS) $(LIB)
+
