@@ -24,7 +24,7 @@ public:
 		NonRecursive
 	};
 	Mutex(RecursiveType type = NonRecursive);
-	~QMutex();
+	~Mutex();
 	void lock();
 	bool tryLock();
 	void unlock();
