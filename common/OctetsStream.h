@@ -22,6 +22,8 @@ public:
 	OctetsStream& operator = (const OctetsStream &other);
 	bool operator == (const OctetsStream &other) const;
 	bool operator != (const OctetsStream &other) const;
+	operator Octets& ();
+	operator const Octets& () const;
 private:
 	template<typename T> OctetsStream& pushBytes(T val)
 	{
@@ -36,6 +38,10 @@ private:
 		m_pos += sizeof(T);
 		return *this;
 	}
+	unsigned char popUChar();
+	unsigned short popUShort();
+	unsigned int popUInt();
+	unsigned long popULong();
 private:
 	Octets m_data;
 	mutable size_t m_pos;	// For output

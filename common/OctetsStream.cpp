@@ -41,5 +41,43 @@ bool OctetsStream::operator != (const OctetsStream &other)
 	return ! operator ==(other);
 }
 
+OctetsStream::operator Octets&()
+{
+	return m_data;
+}
+
+OctetsStream::operator const Octets&() const
+{
+	return m_data;
+}
+
+unsigned char OctetsStream::popUChar()
+{
+	unsigned char c;
+	popBytes(c);
+	return c;
+}
+
+unsigned short OctetsStream::popUShort()
+{
+	unsigned short s;
+	popBytes(s);
+	return s;
+}
+
+unsigned int OctetsStream::popUInt()
+{
+	unsigned int i;
+	popBytes(i);
+	return i;
+}
+
+unsigned long OctetsStream::popULong()
+{
+	unsigned long l;
+	popBytes(l);
+	return l;
+}
+
 }
 }
