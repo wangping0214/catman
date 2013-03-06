@@ -24,6 +24,15 @@ public:
 	bool operator != (const OctetsStream &other) const;
 	operator Octets& ();
 	operator const Octets& () const;
+	void* begin();
+	void* end();
+	const void* begin() const;
+	const void* end() const;
+	void insert(void *pos, const void *buff, size_t len);
+	void insert(void *pos, const void *beginPos, const void *endPos);
+	void erase(size_t pos, size_t len);
+	void erase(void *beginPos, void *endPos);
+	void clear();
 private:
 	template<typename T> OctetsStream& pushBytes(T val)
 	{

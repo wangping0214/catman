@@ -46,6 +46,52 @@ OctetsStream::operator Octets&()
 	return m_data;
 }
 
+void* OctetsStream::begin()
+{
+	return m_data.begin();
+}
+
+void* OctetsStream::end()
+{
+	return m_data.end();
+}
+
+const void* OctetsStream::begin() const
+{
+	return m_data.begin();
+}
+
+const void* OctetsStream::end() const
+{
+	return m_data.end();
+}
+
+void OctetsStream::insert(void *pos, const void *buff, size_t len)
+{
+	m_data.insert(pos, buff, len);
+}
+
+void OctetsStream::insert(void *pos, const void *beginPos, const void *endPos)
+{
+	m_data.insert(pos, beginPos, endPos);
+}
+
+void OctetsStream::erase(size_t pos, size_t len)
+{
+	m_data.erase(pos, len);
+} 
+
+void OctetsStream::erase(const void *beginPos, const void *endPos)
+{
+	m_data.erase(beginPos, endPos);
+}
+
+void OctetsStream::clear()
+{
+	m_data.clear();
+	m_pos = 0;
+}
+
 OctetsStream::operator const Octets&() const
 {
 	return m_data;
