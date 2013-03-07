@@ -1,5 +1,9 @@
 #ifndef CONNECTOR_H
 #define CONNECTOR_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
 #include "PollIO.h"
 

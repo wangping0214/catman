@@ -1,5 +1,9 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
 #include "Octets.h"
 #include "OctetsStream.h"

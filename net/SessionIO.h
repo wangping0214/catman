@@ -1,25 +1,25 @@
-#ifndef STREAMIO_H
-#define STREAMIO_H
+#ifndef SESSIONIO_H
+#define SESSIONIO_H
 /**************************************************************
  * (C) Copyright 2013 Alanmars
  * Keep it simple at first 
  *************************************************************/
 
-#include "SessionIO.h"
+#include "PollIO.h"
  
 namespace catman
 {
 namespace net
 {
 
-class StreamIO : public SessionIO
+class Session;
+
+class SessionIO : public PollIO
 {
-public:
-	StreamIO(int fd, Session *session);
-	~StreamIO();
-	virtual void pollIn();
-	virtual void pollOut();
-	virtual void pollClose();
+protected:
+	SessionIO(int fd, Session *session);
+protected:
+	Session *m_session;
 };
 
 }

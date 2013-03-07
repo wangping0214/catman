@@ -8,6 +8,20 @@ namespace catman
 namespace net
 {
 
+Poller::Poller()
+{
+}
+
+Poller::~Poller()
+{
+}
+
+Poller& Poller::instance()
+{
+		static Poller poller;
+		return poller;
+}
+
 PollIO* Poller::registerPollIO(PollIO *pollIO)
 {
 	m_ioMap[pollIO->fd()] = pollIO;
@@ -82,6 +96,28 @@ void Poller::triggerEvent(int fd)
 	if (FD_ISSET(fd, &m_writeSet))
 		pollIO->pollOut();
 	pollIO->pollClose();
+}
+
+///////////////////////////////////////////////////////////////
+
+PollTask::PollTask()
+{
+}
+
+PollTask::~PollTask()
+{
+}
+
+PollTask& PollTask::instance()
+{
+	static PollTask task;
+	return task;
+}
+
+void PollTask::run()
+{
+	Poller::instance().poll();
+	//thread::ThreadPool::instance().execute(this);
 }
 
 }

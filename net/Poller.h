@@ -1,6 +1,11 @@
 #ifndef POLLER_H
 #define POLLER_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
+#include "thread/Runnable.h"
 #include <map>
 #include <vector>
 #include <sys/select.h>
@@ -17,17 +22,12 @@ class Poller
 	typedef std::vector<int> FDSet;
 	typedef std::map<int, PollIO*> IOMap;
 public:
-	~Poller() {}
-	static Poller& instance()
-	{
-		static Poller poller;
-		return poller;
-	}
+	~Poller();
+	static Poller& instance();
 	PollIO* registerPollIO(PollIO *pollIO);
 	void poll(int timeout);
 private:
-	Poller() {}
-
+	Poller();
 	void updateEvent();
 	void triggerEvent(int fd);
 private:
@@ -37,6 +37,15 @@ private:
 	IOMap m_ioMap;
 };
 
+class PollTask : public thread::Runnable
+{
+public:
+	~PollTask();
+	static PollTask& instance();
+	virtual void run();
+private:
+	PollTask();
+};
 
 }
 }
