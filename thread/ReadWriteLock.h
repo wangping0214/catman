@@ -19,7 +19,7 @@ public:
 	~ReadWriteLock();
 	void lockForRead();
 	void lockForWrite();
-	bool tryLockFroRead();
+	bool tryLockForRead();
 	bool tryLockForWrite();
 	void unlock();
 private:

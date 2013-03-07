@@ -1,4 +1,5 @@
-#include "NetSessionManager.h"
+#include "SessionManager.h"
+#include "Session.h"
 
 namespace catman
 {
@@ -16,16 +17,16 @@ SessionManager::~SessionManager()
 bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
-	Session *s = session();
+	Session *s = session(sessionId);
 	if (NULL != s)
 		return s->send(protocol);
 	return false;
 }
 
-bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
+bool SessionManager::send(size_t sessionId, const common::Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
-	Session *s = session();
+	Session *s = session(sessionId);
 	if (NULL != s)
 		return s->send(protocol);
 	return false;
@@ -52,7 +53,7 @@ void SessionManager::addSession(size_t sessionId, Session *session)
 
 void SessionManager::deleteSession(size_t sessionId)
 {
-	onDeleteSession();
+	onDeleteSession(sessionId);
 	{
 		thread::WriteLocker locker(&m_mapRWLock);
 		m_idSessionMap.erase(sessionId);

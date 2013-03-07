@@ -6,6 +6,7 @@
  *************************************************************/
 
 #include "common/Octets.h"
+#include "common/Protocol.h"
 #include "thread/Mutex.h"
 
 namespace catman

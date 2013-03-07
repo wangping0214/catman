@@ -19,7 +19,12 @@ bool Session::send(common::Octets buff)
 	return true;
 }
 
-bool Session::send(Protocol *protocol)
+bool Session::send(common::Protocol *protocol)
+{
+	return false;
+}
+
+bool Session::send(const common::Protocol *protocol)
 {
 	return false;
 }
@@ -47,6 +52,7 @@ common::Octets& Session::inBuffer()
 
 common::Octets& Session::outBuffer()
 {
+	return m_outBuffer;
 }
 
 }

@@ -25,14 +25,14 @@ void ReadWriteLock::lockForWrite()
 	pthread_rwlock_wrlock(&m_rwlock);
 }
 
-void ReadWriteLock::tryLockForRead()
+bool ReadWriteLock::tryLockForRead()
 {
-	pthread_rwlock_tryrdlock(&m_rwlock);
+	return 0 == pthread_rwlock_tryrdlock(&m_rwlock);
 }
 
-void ReadWriteLock::tryLockForWrite()
+bool ReadWriteLock::tryLockForWrite()
 {
-	pthread_rwlock_trywrlock(&m_rwlock);
+	return 0 == pthread_rwlock_trywrlock(&m_rwlock);
 }
 
 void ReadWriteLock::unlock()

@@ -5,6 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
+#include "common/Protocol.h"
 #include "thread/ReadWriteLock.h"
 #include <map>
  
@@ -36,7 +37,7 @@ private:
 	Session* session(size_t sessionId);					// no lock
 private:
 	IdSessionMap m_idSessionMap;
-	Thread::ReadWriteLock m_mapRWLock;
+	thread::ReadWriteLock m_mapRWLock;
 };
 
 }

@@ -1,11 +1,13 @@
 #include "StreamIO.h"
+#include "Session.h"
+#include <unistd.h>
 
 namespace catman
 {
 namespace net
 {
 
-StreamIO::StreamIO(int fd, Session *session) : SessionIO(fd, s)
+StreamIO::StreamIO(int fd, Session *session) : SessionIO(fd, session)
 {
 	m_session->onOpen();
 }
@@ -21,7 +23,7 @@ void StreamIO::pollIn()
 	int recvSize = read(m_fd, inBuffer.end(), inBuffer.capacity() - inBuffer.size());
 	if (recvSize > 0)
 	{
-		session->onRecv();
+		m_session->onRecv();
 		// if inBuffer is full now.
 		if (inBuffer.capacity() == inBuffer.size())
 			forbidRecv();
@@ -31,7 +33,7 @@ void StreamIO::pollIn()
 
 void StreamIO::pollOut()
 {
-	Thread::MutexLocker locker(&(session->outLock));
+	thread::MutexLocker locker(&(m_session->outLock()));
 	common::Octets& outBuffer = m_session->outBuffer();
 	// TODO: handle exceptional occasion
 	int sendSize = write(m_fd, outBuffer.begin(), outBuffer.size());
