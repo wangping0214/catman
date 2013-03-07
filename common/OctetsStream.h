@@ -12,6 +12,8 @@ namespace catman
 namespace common
 {
 
+class Marshal;
+
 class OctetsStream
 {
 public:
@@ -33,13 +35,28 @@ public:
 	void erase(size_t pos, size_t len);
 	void erase(void *beginPos, void *endPos);
 	void clear();
+
+	// << operator overload begin
+	OctetsStream& operator << (bool b);
+	OctetsStream& operator << (char c);
+	OctetsStream& operator << (unsigned char uc);
+	OctetsStream& operator << (short s);
+	OctetsStream& operator << (unsigned short us);
+	OctetsStream& operator << (int i);
+	OctetsStream& operator << (unsigned int ui);
+	OctetsStream& operator << (long l);
+	OctetsStream& operator << (unsigned long ul);
+	OctetsStream& operator << (float f);
+	OctetsStream& operator << (double d);
+	OctetsStream& operator << (const Marshal &marshal);
+	OctetsStream& operator << (const Octets &octets);
 private:
-	template<typename T> OctetsStream& pushBytes(T val)
+	template<typename T> OctetsStream& pushT(T val)
 	{
 		m_data.insert(m_data.end(), &val, sizeof(T));
-		return this;
+		return *this;
 	}
-	template<typename T> OctetsStream& popBytes(T &val)
+	template<typename T> OctetsStream& popT(T &val)
 	{
 		if (m_pos + sizeof(T) > m_data.size())
 			;

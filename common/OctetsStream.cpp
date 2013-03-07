@@ -1,4 +1,5 @@
 #include "OctetsStream.h"
+#include "Marshal.h"
 
 namespace catman
 {
@@ -46,6 +47,12 @@ OctetsStream::operator Octets&()
 	return m_data;
 }
 
+OctetsStream::operator const Octets&() const
+{
+	return m_data;
+}
+
+
 void* OctetsStream::begin()
 {
 	return m_data.begin();
@@ -92,36 +99,105 @@ void OctetsStream::clear()
 	m_pos = 0;
 }
 
-OctetsStream::operator const Octets&() const
+// >> operator overload begin
+
+OctetsStream& OctetsStream::operator << (bool b)
 {
-	return m_data;
+	return pushT(b);
 }
+
+OctetsStream& OctetsStream::operator << (char c)
+{
+	return pushT(c);
+}
+
+OctetsStream& OctetsStream::operator << (unsigned char uc)
+{
+	return pushT(uc);
+}
+
+OctetsStream& OctetsStream::operator << (short s)
+{
+	return pushT(s);
+}
+
+OctetsStream& OctetsStream::operator << (unsigned short us)
+{
+	return pushT(us);
+}
+
+OctetsStream& OctetsStream::operator << (int i)
+{
+	return pushT(i);
+}
+
+OctetsStream& OctetsStream::operator << (unsigned int ui)
+{
+	return pushT(ui);
+}
+
+OctetsStream& OctetsStream::operator << (long l)
+{
+	return pushT(l);
+}
+
+OctetsStream& OctetsStream::operator << (unsigned long ul)
+{
+	return pushT(ul);
+}
+
+OctetsStream& OctetsStream::operator << (float f)
+{
+	return pushT(f);
+}
+
+OctetsStream& OctetsStream::operator << (double d)
+{
+	return pushT(d);
+}
+
+OctetsStream& OctetsStream::operator << (const Marshal &marshal)
+{
+	marshal.marshal(*this);
+	return *this;
+}
+
+OctetsStream& OctetsStream::operator << (const Octets &octets)
+{
+	operator << (octets.size());
+	m_data.insert(m_data.end(), octets.begin(), octets.end());
+	return *this;
+}
+
+// >> operator overlaod end
+
+
 
 unsigned char OctetsStream::popUChar()
 {
 	unsigned char c;
-	popBytes(c);
+	popT(c);
 	return c;
 }
 
 unsigned short OctetsStream::popUShort()
 {
 	unsigned short s;
-	popBytes(s);
+	popT(s);
 	return s;
 }
 
 unsigned int OctetsStream::popUInt()
 {
 	unsigned int i;
-	popBytes(i);
+	popT(i);
 	return i;
 }
 
 unsigned long OctetsStream::popULong()
 {
 	unsigned long l;
-	popBytes(l);
+	popT(l);
 	return l;
 }
 
