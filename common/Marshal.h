@@ -10,6 +10,8 @@ namespace catman
 namespace common
 {
 
+class OctetsStream;
+
 class Marshal
 {
 public:
