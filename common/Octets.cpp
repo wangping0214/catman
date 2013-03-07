@@ -284,6 +284,14 @@ Octets& Octets::resize(size_t size)
 	return *this;
 }
 
+Octets& Octets::replace(const void *buff, size_t len)
+{
+	reserve(len);
+	memcpy(m_base, buff, len);
+	rep()->setSize(len);
+	return *this;
+}
+
 Octets::Rep* Octets::rep() const
 {
 	return reinterpret_cast<Rep*>(m_base) - 1;

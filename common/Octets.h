@@ -64,6 +64,7 @@ public:
 	Octets& insert(void *pos, const void *beginPos, const void *endPos);
 	Octets& reserve(size_t size);
 	Octets& resize(size_t size);
+	Octets& replace(const void *buff, size_t len);
 private:
 	Rep* rep() const;
 private:
