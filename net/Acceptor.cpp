@@ -27,7 +27,7 @@ void Acceptor::pollOut()
 {
 }
 
-void Acceptor::pollClose()
+void Acceptor::detectCloseEvent()
 {
 }
 

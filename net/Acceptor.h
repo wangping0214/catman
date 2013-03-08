@@ -19,7 +19,7 @@ public:
 	~Acceptor();
 	virtual void pollIn();
 	virtual void pollOut();
-	virtual void pollClose();
+	virtual void detectCloseEvent();
 };
 
 }

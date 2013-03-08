@@ -19,9 +19,12 @@ class PollIO
 {
 public:
 	~PollIO();
+	/* trigger by POLLIN event from socket */
 	virtual void pollIn() = 0;
-	virtual void pollOut() {}
-	virtual void pollClose() {}
+	/* trigger by POLLOUT event from sockt */
+	virtual void pollOut() = 0;
+	/* Detect close event from Session */
+	virtual void detectCloseEvent() = 0;
 	void permitRecv();
 	void permitSend();
 	void forbidRecv();

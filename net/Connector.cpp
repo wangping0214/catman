@@ -34,7 +34,7 @@ void Connector::pollOut()
 	close();
 }
 
-void Connector::pollClose()
+void Connector::detectCloseEvent()
 {
 }
 

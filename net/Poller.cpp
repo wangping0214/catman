@@ -95,7 +95,7 @@ void Poller::triggerEvent(int fd)
 		pollIO->pollIn();
 	if (FD_ISSET(fd, &m_writeSet))
 		pollIO->pollOut();
-	pollIO->pollClose();
+	pollIO->detectCloseEvent();
 }
 
 ///////////////////////////////////////////////////////////////

@@ -43,7 +43,7 @@ void StreamIO::pollOut()
 	// if peer has done an orderly shutdown
 }
 
-void StreamIO::pollClose()
+void StreamIO::detectCloseEvent()
 {
 	close();
 }
