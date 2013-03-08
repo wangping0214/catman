@@ -8,13 +8,55 @@
 #include "Thread.h"
 #include "Mutex.h"
 #include "Condition.h"
-#include <deque>
+//#include <deque>
+#include <list>
 #include <vector>
+#include <stdio.h>
 
 namespace catman
 {
 namespace thread
 {
+
+template<typename T> class TList
+{
+public:
+	TList() : m_size(0) {}
+	void push_front(T t)
+	{
+		TS[0] = t;
+		incSize();
+	}
+	T back()
+	{
+		return TS[m_size - 1];
+	}
+	void pop_back()
+	{
+		decSize();
+	}
+	int size()
+	{
+		return m_size;
+	}
+	bool empty()
+	{
+		return m_size == 0;
+	}
+	void incSize()
+	{
+		printf("Inc Size\n");
+		++ m_size;
+	}
+	void decSize()
+	{
+		printf("Dec Size\n");
+		-- m_size;
+	}
+private:
+	T TS[2];
+	int m_size;
+};
 
 class ThreadPool
 {
@@ -29,7 +71,7 @@ class ThreadPool
 		ThreadPool *m_pool;
 		bool m_isStopped;
 	};
-	typedef std::deque<Runnable*> RunnableQueue;
+	typedef std::list<Runnable*> RunnableQueue;
 	typedef std::vector<ThreadPoolThread*> ThreadVector; 
 public:
 	static ThreadPool& instance();

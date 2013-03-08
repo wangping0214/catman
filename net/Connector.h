@@ -6,6 +6,7 @@
  *************************************************************/
 
 #include "PollIO.h"
+#include <sys/socket.h>
 
 namespace catman
 {
@@ -19,7 +20,7 @@ class Connector : public PollIO
 public:
 	static Connector* open(const Session &session);
 private:
-	Connector(int fd, const Session &session);
+	Connector(int fd, const struct sockaddr &addr, const Session &session);
 	~Connector();
 	virtual void pollIn();
 	virtual void pollOut();

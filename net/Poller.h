@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "thread/Runnable.h"
+#include <catman/thread/Runnable.h>
 #include <map>
 #include <vector>
 #include <sys/select.h>

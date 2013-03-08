@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "thread/ReadWriteLock.h"
+#include <catman/thread/ReadWriteLock.h>
 #include <map>
  
 namespace catman

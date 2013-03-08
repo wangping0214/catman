@@ -1,6 +1,9 @@
 #include "PollTask.h"
 #include "Poller.h"
-#include "thread/ThreadPool.h"
+#include <catman/thread/ThreadPool.h>
+
+#include <iostream>
+using namespace std;
 
 namespace catman
 {
@@ -23,8 +26,10 @@ PollTask& PollTask::instance()
 
 void PollTask::run()
 {
-	Poller::instance().poll(1000);
-	thread::ThreadPool::instance().execute(this);
+	//Poller::instance().poll(1000);
+	sleep(5);
+	cout << "PollTask" << endl;
+	thread::ThreadPool::instance().execute(/*this*/new PollTask());
 }
 
 }

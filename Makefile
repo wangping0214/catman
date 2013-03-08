@@ -1,8 +1,8 @@
 CXX = g++ -fPIC
 FLAGS = -ggdb -Wall
-INCLUDES = -I/home/alan/workspace/catman
+INCLUDES = -I/home/alan/workspace
 LIBS = -lpthread
-CPPFILES = $(wildcard ./common/*.cpp) $(wildcard ./net/*.cpp) $(wildcard ./thread/*.cpp)
+CPPFILES = $(wildcard ./common/*.cpp) $(wildcard ./net/*.cpp) $(wildcard ./thread/*.cpp) $(wildcard ./tinyxml2/*.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))
 LIB = libcatman.so
 

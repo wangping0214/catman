@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
  
-#include "thread/Runnable.h"
+#include <catman/thread/Runnable.h>
 
 namespace catman
 {

@@ -5,8 +5,8 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "thread/Runnable.h" 
-#include "net/SessionManager.h"
+#include <catman/thread/Runnable.h>
+#include <catman/net/SessionManager.h>
 
 namespace catman
 {

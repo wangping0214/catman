@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <poll.h>
 
+#include <iostream>
+using namespace std;
+
 namespace catman
 {
 namespace net
@@ -38,8 +41,8 @@ void Poller::poll(int timeout)
 	else
 	{
 		struct timeval tv;
-		tv.tv_sec = timeout / timeout;
-		tv.tv_usec = (timeout % timeout) * 1000;
+		tv.tv_sec = timeout / 1000;
+		tv.tv_usec = (timeout % 1000) * 1000;
 		eventCount = ::select(m_maxfd + 1, &m_readSet, &m_writeSet, NULL, &tv);
 	}
 	if (eventCount > 0)
@@ -47,6 +50,7 @@ void Poller::poll(int timeout)
 		for (FDSet::const_iterator it = m_fdSet.begin(), ie = m_fdSet.end(); it != ie; ++ it)
 			triggerEvent(*it);
 	}
+	cout << "Poller::poll" << endl;
 }
 
 void Poller::updateEvent()

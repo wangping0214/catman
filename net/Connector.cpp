@@ -2,10 +2,13 @@
 #include "Poller.h"
 #include "Session.h"
 #include "StreamIO.h"
+#include <catman/common/Configuration.h>
 #include <stddef.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <arpa/inet.h>
 
 namespace catman
 {
@@ -14,17 +17,27 @@ namespace net
 
 Connector* Connector::open(const Session &session)
 {
+	const common::Configuration &conf = common::Configuration::instance();
 	int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	
+	struct sockaddr_in addr;
+	addr.sin_family = AF_INET;
+	if (inet_pton(AF_INET, conf.attributeValue("Client", "address").c_str(), &(addr.sin_addr)) != 1)
+		; 	// exception
+	unsigned short port = atoi(conf.attributeValue("Client", "port").c_str());
+	addr.sin_port = htons(port);
 	int val = 1;
 	setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &val, sizeof(val));
-	
-	return (Connector*)Poller::instance().registerPollIO(new Connector(sockfd, session));
+	val = atoi(conf.attributeValue("Client", "sendbufsize").c_str());
+	setsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, &val, sizeof(val));
+	val = atoi(conf.attributeValue("Client", "recvbufsize").c_str());
+	setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &val, sizeof(val));
+	return (Connector*)Poller::instance().registerPollIO(new Connector(sockfd, *((sockaddr*)(&addr)), session));
 }
 
-Connector::Connector(int fd, const Session &session) : PollIO(fd), m_session(session.clone())
+Connector::Connector(int fd, const struct sockaddr &addr, const Session &session) : PollIO(fd), m_session(session.clone())
 {
-	connect(m_fd, NULL, 1);	//TODO
+	connect(m_fd, &addr, sizeof(addr));	//TODO
 }
 
 Connector::~Connector()

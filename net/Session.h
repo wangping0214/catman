@@ -5,8 +5,8 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "common/Octets.h"
-#include "thread/Mutex.h"
+#include <catman/common/Octets.h>
+#include <catman/thread/Mutex.h>
 
 namespace catman
 {

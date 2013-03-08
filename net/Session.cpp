@@ -1,8 +1,8 @@
 #include "Session.h"
-#include "common/OctetsStream.h"
-#include "common/Protocol.h"
-#include "common/ProcessTask.h"
-#include "thread/ThreadPool.h"
+#include <catman/common/OctetsStream.h>
+#include <catman/common/Protocol.h>
+#include <catman/common/ProcessTask.h>
+#include <catman/thread/ThreadPool.h>
 #include "PollIO.h"
 
 namespace catman
