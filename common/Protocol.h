@@ -7,6 +7,7 @@
 
 #include "Octets.h"
 #include "OctetsStream.h"
+#include "thread/Runnable.h"
 #include <map>
 #include <cstddef>
 
@@ -15,11 +16,13 @@ namespace catman
 namespace common
 {
 
-class Protocol
+class net::SessionManager;
+
+class Protocol : public Marshal
 {
 	typedef std::map<size_t, Protocol*> TypeProtocolMap;
 public:
-	virtual void process() = 0;
+	virtual void process(net::SessionManager *manager, size_t sessionId) = 0;
 	virtual Protocol* clone() const = 0;
 	virtual void destory();
 	size_t type() const;

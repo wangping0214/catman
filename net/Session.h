@@ -21,8 +21,10 @@ class Session
 {
 	friend class StreamIO;
 public:
-	Session();
+	Session(SessionManager *manager);
+	Session(const Session& other);
 	~Session();
+	Session* clone() const;
 	bool send(common::Octets buff);	// application layer	->	session layer
 	bool send(common::Protocol *protocol);	// application layer 	-> 	session layer
 	bool send(const common::Protocol *protocol);
@@ -30,15 +32,24 @@ public:
 	virtual void onOpen();			// transport layer		->	session layer
 	virtual void onClose();
 	virtual void onAbort();
+	void close(bool needLock);
+	bool isClosing() const;
 private:
 	common::Octets& inBuffer();
 	common::Octets& outBuffer();
 	thread::Mutex& outLock();
+	static size_t nextId();
 private:
 	PollIO *m_pollIO;
 	common::Octets m_inBuffer;	// for PollIO
 	common::Octets m_outBuffer; // for PollIO
 	thread::Mutex m_outLock;	// for send
+	SessionManager *m_manager;	// which manager belongs to
+	size_t m_id;				// id
+	bool m_closing;
+	
+	static size_t s_idSeed;
+	static thread::Mutex s_seedLock;
 };
 
 }

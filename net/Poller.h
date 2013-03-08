@@ -37,16 +37,6 @@ private:
 	IOMap m_ioMap;
 };
 
-class PollTask : public thread::Runnable
-{
-public:
-	~PollTask();
-	static PollTask& instance();
-	virtual void run();
-private:
-	PollTask();
-};
-
 }
 }
 

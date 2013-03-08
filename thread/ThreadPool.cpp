@@ -20,7 +20,6 @@ void ThreadPool::ThreadPoolThread::run()
 	{
 		Runnable *runnable = m_pool->fetchRunnable();
 		runnable->run();
-		//delete runnable;
 	}
 }
 
@@ -30,6 +29,13 @@ void ThreadPool::ThreadPoolThread::stop()
 }
 
 ////////////////////////////////////////////////////////////////
+
+ThreadPool& ThreadPool::instance()
+{
+	// must be configurable
+	static ThreadPool pool(4);
+	return pool;
+}
 
 ThreadPool::ThreadPool(size_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize)
 {

@@ -15,11 +15,15 @@ namespace net
 class Connector : public PollIO
 {
 public:
+	static Connector* open(const Session *session);
+private:
 	Connector(int fd);
 	~Connector();
 	virtual void pollIn();
 	virtual void pollOut();
 	virtual void detectCloseEvent();
+private:
+	Session *m_session;
 };
 
 }

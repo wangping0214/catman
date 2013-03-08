@@ -9,18 +9,29 @@ namespace catman
 namespace net
 {
 
-Connector::Connector(int fd) : PollIO(fd)
+Connector* Connector::open(const Session &session)
 {
+	int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	
+	int val = 1;
+	setsockopt(sockfd, SOL_SOCKET, SO_KEEPALIVE, &val, sizeof(val));
+	
+	return (Connector*)Poller::instance().registerPollIO(new Connector(sockfd, session));
+}
+
+Connector::Connector(int fd, const Session &session) : PollIO(fd), m_session(session.clone())
+{
+	connect(m_fd, NULL, 1);	//TODO
 }
 
 Connector::~Connector()
 {
 	int optVal = -1;
 	socklen_t optLen = sizeof(optVal);
-	int optRet = getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &optVal, &optLen);
+	int optRet = getsockopt(dup(m_fd), SOL_SOCKET, SO_ERROR, &optVal, &optLen);
 	if (0 == optRet && 0 == optVal)
 	{
-		Poller::instance().registerPollIO(NULL); //TODO
+		Poller::instance().registerPollIO(new StreamIO(m_fd, m_session)); //TODO
 	}
 }
 

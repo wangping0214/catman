@@ -32,6 +32,7 @@ class ThreadPool
 	typedef std::deque<Runnable*> RunnableQueue;
 	typedef std::vector<ThreadPoolThread*> ThreadVector; 
 public:
+	static ThreadPool& instance();
 	explicit ThreadPool(size_t maximumPoolSize);
 	virtual ~ThreadPool();
 	virtual void start();

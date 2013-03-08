@@ -15,11 +15,15 @@ namespace net
 class Acceptor : public PollIO
 {
 public:
-	Acceptor(int fd);
+	static Acceptor* open(const Session &session);
+private:
+	Acceptor(int fd, const Session &session);
 	~Acceptor();
 	virtual void pollIn();
 	virtual void pollOut();
 	virtual void detectCloseEvent();
+private:
+	Session *m_session;
 };
 
 }

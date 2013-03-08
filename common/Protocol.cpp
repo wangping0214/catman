@@ -34,23 +34,36 @@ size_t Protocol::type() const
 void Protocol::encode(OctetsStream &stream) const
 {
 	OctetsStream data;
-	//data << *this;
-	//stream << m_type << data;
+	data << *this;
+	stream << m_type << data;
 }
 
 Octets Protocol::encode() const
 {
-	return Octets();
+	OctetsStream stream;
+	encode(stream);
+	return (Octets)stream;
 }
 
 Octets Protocol::encode() 
 {
-	return Octets();
+	OctetsStream stream;
+	encode(stream);
+	return (Octets)stream;
 }
 
 Protocol* Protocol::decode(OctetsStream &stream)
 {
-	return NULL;
+	if (stream.atEnd())
+		return false;
+	Protocol *protocol = NULL;
+	size_t type = 0;
+	size_t size = 0;
+	stream >> type >> size;
+	if ((protocol = create(type)) != NULL)
+		stream >> *protocol;
+	// else consider exceptional occasion
+	return protocol;
 }
 
 const Protocol* Protocol::getStub(size_t type)
