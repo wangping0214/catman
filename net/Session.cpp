@@ -1,4 +1,9 @@
 #include "Session.h"
+#include "common/OctetsStream.h"
+#include "common/Protocol.h"
+#include "common/ProcessTask.h"
+#include "thread/ThreadPool.h"
+#include "PollIO.h"
 
 namespace catman
 {
@@ -8,7 +13,7 @@ namespace net
 size_t Session::s_idSeed = 0;
 thread::Mutex Session::s_seedLock;
 
-Session::Session(SessionManager *manager) : m_manager(manager), m_pollIO(NULL), m_id(nextId()), m_closing(false)
+Session::Session(SessionManager *manager) : m_pollIO(NULL), m_manager(manager), m_id(nextId()), m_closing(false)
 {
 }
 
@@ -43,10 +48,10 @@ bool Session::send(const common::Protocol *protocol)
 
 void Session::onRecv()
 {
-	OctetsStream stream(m_inBuffer);
-	for (common::Protocol *p; p = common::Protocol::decode(stream); )
+	common::OctetsStream stream(m_inBuffer);
+	for (common::Protocol *p; (p = common::Protocol::decode(stream)) != NULL; )
 	{
-		ProcessTask *task = new ProcessTask(p, m_manager, m_id);
+		common::ProcessTask *task = new common::ProcessTask(p, m_manager, m_id);
 		thread::ThreadPool::instance().execute(task);
 	}
 }
@@ -87,6 +92,11 @@ void Session::close(bool needLock)
 bool Session::isClosing() const
 {
 	return m_closing;
+}
+
+void Session::destroy()
+{
+	delete this;
 }
 
 common::Octets& Session::inBuffer()

@@ -12,6 +12,8 @@ namespace catman
 namespace net
 {
 
+class Session;
+
 class Acceptor : public PollIO
 {
 public:

@@ -1,4 +1,5 @@
 #include "SessionIO.h"
+#include "Session.h"
 
 namespace catman
 {

@@ -5,12 +5,17 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "common/Protocol.h"
 #include "thread/ReadWriteLock.h"
 #include <map>
  
 namespace catman
 {
+
+namespace common
+{
+class Protocol;
+}
+
 namespace net
 {
 

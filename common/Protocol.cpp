@@ -1,4 +1,5 @@
 #include "Protocol.h"
+#include "OctetsStream.h"
 
 namespace catman
 {
@@ -21,7 +22,7 @@ Protocol::~Protocol()
 {
 }
 
-void Protocol::destory()
+void Protocol::destroy()
 {
 	delete this;
 }

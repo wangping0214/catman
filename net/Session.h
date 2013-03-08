@@ -6,19 +6,27 @@
  *************************************************************/
 
 #include "common/Octets.h"
-#include "common/Protocol.h"
 #include "thread/Mutex.h"
 
 namespace catman
 {
+
+namespace common
+{
+class Protocol;
+}
+
 namespace net
 {
 
 class PollIO;
+class SessionIO;
 class StreamIO;
+class SessionManager;
 
 class Session
 {
+	friend class SessionIO;
 	friend class StreamIO;
 public:
 	Session(SessionManager *manager);
@@ -34,6 +42,7 @@ public:
 	virtual void onAbort();
 	void close(bool needLock);
 	bool isClosing() const;
+	void destroy();
 private:
 	common::Octets& inBuffer();
 	common::Octets& outBuffer();

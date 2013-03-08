@@ -5,12 +5,15 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "thread/Runnable.h"
- 
+#include "thread/Runnable.h" 
+#include "net/SessionManager.h"
+
 namespace catman
 {
 namespace common
 {
+
+class Protocol;
 
 class ProcessTask : public thread::Runnable
 {

@@ -1,7 +1,10 @@
 #include "Acceptor.h"
 #include "Poller.h"
+#include "Session.h"
+#include "StreamIO.h"
 #include <stddef.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 namespace catman
 {
@@ -10,7 +13,7 @@ namespace net
 
 Acceptor* Acceptor::open(const Session &session)
 {
-	int sockfd = socket(AF_INET, SOCK_STREAM, IPPPOTO_TCP);
+	int sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	
 	int val = 1;
 	

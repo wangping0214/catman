@@ -1,8 +1,11 @@
 #include "Connector.h"
 #include "Poller.h"
-#include <log4cxx/logger.h>
+#include "Session.h"
+#include "StreamIO.h"
 #include <stddef.h>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
 
 namespace catman
 {

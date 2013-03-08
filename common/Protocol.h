@@ -5,18 +5,24 @@
  * Keep it simple at first 
  *************************************************************/
 
+#include "Marshal.h"
 #include "Octets.h"
-#include "OctetsStream.h"
-#include "thread/Runnable.h"
 #include <map>
 #include <cstddef>
 
 namespace catman
 {
+
+/* net namespace forward declaration */
+namespace net
+{
+class SessionManager;
+}
+
 namespace common
 {
 
-class net::SessionManager;
+class OctetsStream;
 
 class Protocol : public Marshal
 {
@@ -24,7 +30,7 @@ class Protocol : public Marshal
 public:
 	virtual void process(net::SessionManager *manager, size_t sessionId) = 0;
 	virtual Protocol* clone() const = 0;
-	virtual void destory();
+	virtual void destroy();
 	size_t type() const;
 	void encode(OctetsStream &stream) const;
 	Octets encode() const;

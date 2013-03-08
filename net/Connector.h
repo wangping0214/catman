@@ -12,12 +12,14 @@ namespace catman
 namespace net
 {
 
+class Session;
+
 class Connector : public PollIO
 {
 public:
-	static Connector* open(const Session *session);
+	static Connector* open(const Session &session);
 private:
-	Connector(int fd);
+	Connector(int fd, const Session &session);
 	~Connector();
 	virtual void pollIn();
 	virtual void pollOut();
