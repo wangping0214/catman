@@ -63,7 +63,8 @@ void Poller::updateEvent()
 		{
 			FD_CLR(fd, &m_readSet);
 			FD_CLR(fd, &m_writeSet);
-			m_ioMap[fd] = NULL;
+			//m_ioMap[fd] = NULL; // must erase
+			m_ioMap.erase(it);
 			delete pollIO;
 		}
 		else
