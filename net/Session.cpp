@@ -3,12 +3,15 @@
 #include <catman/common/OctetsStream.h>
 #include <catman/common/Protocol.h>
 #include <catman/common/ProcessTask.h>
+#include <catman/common/LogUtil.h>
 #include <catman/thread/ThreadPool.h>
 
 namespace catman
 {
 namespace net
 {
+
+log4cxx::LoggerPtr Session::logger(log4cxx::Logger::getLogger("catman/net/Session"));
 
 size_t Session::s_idSeed = 0;
 thread::Mutex Session::s_seedLock;
@@ -43,12 +46,12 @@ bool Session::send(common::Octets buff)
 
 bool Session::send(common::Protocol *protocol)
 {
-	return false;
+	return send(protocol->encode());
 }
 
 bool Session::send(const common::Protocol *protocol)
 {
-	return false;
+	return send(protocol->encode());
 }
 
 void Session::onRecv()

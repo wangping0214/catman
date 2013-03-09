@@ -7,6 +7,7 @@
 
 #include <catman/common/Octets.h>
 #include <catman/thread/Mutex.h>
+#include <log4cxx/logger.h>
 
 namespace catman
 {
@@ -59,6 +60,8 @@ private:
 	
 	static size_t s_idSeed;
 	static thread::Mutex s_seedLock;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

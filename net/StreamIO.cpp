@@ -1,5 +1,6 @@
 #include <catman/net/StreamIO.h>
 #include <catman/net/Session.h>
+#include <catman/common/LogUtil.h>
 #include <unistd.h>
 #include <errno.h>
 #include <poll.h>
@@ -8,6 +9,8 @@ namespace catman
 {
 namespace net
 {
+
+log4cxx::LoggerPtr StreamIO::logger(log4cxx::Logger::getLogger("catman/net/StreamIO"));
 
 StreamIO::StreamIO(int fd, Session *session) : SessionIO(fd, session)
 {
@@ -31,6 +34,7 @@ void StreamIO::pollIn()
 		recvSize = read(m_fd, inBuffer.end(), inBuffer.capacity() - inBuffer.size());
 		if (recvSize > 0)
 		{
+			inBuffer.resize(inBuffer.size() + recvSize);
 			m_session->onRecv();
 			// if inBuffer is full now.
 			if (inBuffer.capacity() == inBuffer.size())

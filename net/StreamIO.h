@@ -6,6 +6,7 @@
  *************************************************************/
 
 #include <catman/net/SessionIO.h>
+#include <log4cxx/logger.h>
  
 namespace catman
 {
@@ -20,6 +21,8 @@ public:
 	virtual void pollIn();
 	virtual void pollOut();
 	virtual void detectCloseEvent();
+private:
+	static log4cxx::LoggerPtr logger;
 };
 
 }

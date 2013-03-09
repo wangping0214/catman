@@ -37,9 +37,9 @@ size_t Protocol::type() const
 
 void Protocol::encode(OctetsStream &stream) const
 {
-	OctetsStream data;
-	data << *this;
-	stream << m_type << data;
+//	OctetsStream data;
+//	data << *this;
+	stream << m_type << *this;
 }
 
 Octets Protocol::encode() const
@@ -62,8 +62,7 @@ Protocol* Protocol::decode(OctetsStream &stream)
 		return false;
 	Protocol *protocol = NULL;
 	size_t type = 0;
-	size_t size = 0;
-	stream >> type >> size;
+	stream >> type;
 	if ((protocol = create(type)) != NULL)
 		stream >> *protocol;
 	// else consider exceptional occasion

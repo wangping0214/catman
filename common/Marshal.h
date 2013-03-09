@@ -16,7 +16,7 @@ class Marshal
 {
 public:
 	virtual OctetsStream& marshal(OctetsStream &stream) const = 0;
-	virtual const OctetsStream& unmarshal(const OctetsStream &stream) const = 0;
+	virtual const OctetsStream& unmarshal(const OctetsStream &stream) = 0;
 	virtual ~Marshal() {}
 };
 
