@@ -6,6 +6,7 @@
  *************************************************************/
  
 #include <catman/thread/Runnable.h>
+#include <log4cxx/logger.h>
 
 namespace catman
 {
@@ -20,6 +21,8 @@ public:
 	virtual void run();
 private:
 	PollTask();
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

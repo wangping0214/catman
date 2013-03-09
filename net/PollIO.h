@@ -30,14 +30,8 @@ public:
 	void forbidRecv();
 	void forbidSend();
 	void close();
-	int fd() const
-	{
-		return m_fd;
-	}
-	int event() const
-	{
-		return m_event;
-	}
+	int fileDescriptor() const;
+	int event() const;
 protected:
 	PollIO(int fd);
 protected:

@@ -47,7 +47,18 @@ void PollIO::close()
 	m_event |= POLLCLOSE;
 }
 
+int PollIO::fileDescriptor() const
+{
+	return m_fd;
 }
+
+int PollIO::event() const
+{
+	return m_event;
+}
+
+}
+
 }
 
 

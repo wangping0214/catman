@@ -6,6 +6,7 @@
  *************************************************************/
 
 #include "PollIO.h"
+#include <log4cxx/logger.h>
 #include <sys/socket.h>
 
 namespace catman
@@ -27,6 +28,8 @@ private:
 	virtual void detectCloseEvent();
 private:
 	Session *m_session;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

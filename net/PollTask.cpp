@@ -2,13 +2,12 @@
 #include "Poller.h"
 #include <catman/thread/ThreadPool.h>
 
-#include <iostream>
-using namespace std;
-
 namespace catman
 {
 namespace net
 {
+
+log4cxx::LoggerPtr PollTask::logger(log4cxx::Logger::getLogger("catman/net/PollTask"));
 
 PollTask::PollTask()
 {
@@ -26,10 +25,12 @@ PollTask& PollTask::instance()
 
 void PollTask::run()
 {
-	//Poller::instance().poll(1000);
-	sleep(5);
-	cout << "PollTask" << endl;
-	thread::ThreadPool::instance().execute(/*this*/new PollTask());
+	/*
+	char msg[128];
+	sprintf(msg, "Poll from thread: %lu\n", pthread_self());
+	LOG4CXX_DEBUG(logger, msg);*/
+	Poller::instance().poll(1000);
+	thread::ThreadPool::instance().execute(this);
 }
 
 }

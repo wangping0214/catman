@@ -6,6 +6,7 @@
  *************************************************************/
 
 #include <catman/thread/Runnable.h>
+#include <log4cxx/logger.h>
 #include <map>
 #include <vector>
 #include <sys/select.h>
@@ -35,6 +36,8 @@ private:
 	fd_set m_readSet, m_writeSet;
 	int m_maxfd;
 	IOMap m_ioMap;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

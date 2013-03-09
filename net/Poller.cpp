@@ -3,13 +3,12 @@
 #include <algorithm>
 #include <poll.h>
 
-#include <iostream>
-using namespace std;
-
 namespace catman
 {
 namespace net
 {
+
+log4cxx::LoggerPtr Poller::logger(log4cxx::Logger::getLogger("catman/net/Poller"));
 
 Poller::Poller()
 {
@@ -27,7 +26,7 @@ Poller& Poller::instance()
 
 PollIO* Poller::registerPollIO(PollIO *pollIO)
 {
-	m_ioMap[pollIO->fd()] = pollIO;
+	m_ioMap[pollIO->fileDescriptor()] = pollIO;
 	return pollIO;
 }
 
@@ -50,7 +49,6 @@ void Poller::poll(int timeout)
 		for (FDSet::const_iterator it = m_fdSet.begin(), ie = m_fdSet.end(); it != ie; ++ it)
 			triggerEvent(*it);
 	}
-	cout << "Poller::poll" << endl;
 }
 
 void Poller::updateEvent()
@@ -58,7 +56,7 @@ void Poller::updateEvent()
 	for (IOMap::const_iterator it = m_ioMap.begin(), ie = m_ioMap.end(); it != ie; ++ it)
 	{
 		PollIO *pollIO = it->second;
-		int fd = pollIO->fd();
+		int fd = pollIO->fileDescriptor();
 		int newEvent = pollIO->event();
 
 		if (newEvent & POLLCLOSE)

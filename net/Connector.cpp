@@ -15,6 +15,8 @@ namespace catman
 namespace net
 {
 
+log4cxx::LoggerPtr Connector::logger(log4cxx::Logger::getLogger("catman/net/Connector"));
+
 Connector* Connector::open(const Session &session)
 {
 	const common::Configuration &conf = common::Configuration::instance();
@@ -44,11 +46,14 @@ Connector::~Connector()
 {
 	int optVal = -1;
 	socklen_t optLen = sizeof(optVal);
-	int optRet = getsockopt(dup(m_fd), SOL_SOCKET, SO_ERROR, &optVal, &optLen);
+	int optRet = getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &optVal, &optLen);
 	if (0 == optRet && 0 == optVal)
 	{
-		Poller::instance().registerPollIO(new StreamIO(m_fd, m_session)); //TODO
+		LOG4CXX_DEBUG(logger, "Connect successfully");
+		Poller::instance().registerPollIO(new StreamIO(dup(m_fd), m_session)); //TODO
 	}
+	else
+		LOG4CXX_WARN(logger, "Failed to connect");
 }
 
 void Connector::pollIn()
