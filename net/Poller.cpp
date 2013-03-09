@@ -1,7 +1,9 @@
 #include <catman/net/Poller.h>
 #include <catman/net/PollIO.h>
+#include <catman/common/LogUtil.h>
 #include <algorithm>
 #include <poll.h>
+#include <stdio.h>
 
 namespace catman
 {
@@ -53,12 +55,12 @@ void Poller::poll(int timeout)
 
 void Poller::updateEvent()
 {
-	for (IOMap::const_iterator it = m_ioMap.begin(), ie = m_ioMap.end(); it != ie; ++ it)
+	for (IOMap::iterator it = m_ioMap.begin(), ie = m_ioMap.end(); it != ie; ++ it)
 	{
 		PollIO *pollIO = it->second;
 		int fd = pollIO->fileDescriptor();
 		int newEvent = pollIO->event();
-
+		catman::common::LogDebug(logger, "POLLEVENT: sock:%d, event:%d", fd, newEvent);
 		if (newEvent & POLLCLOSE)
 		{
 			FD_CLR(fd, &m_readSet);

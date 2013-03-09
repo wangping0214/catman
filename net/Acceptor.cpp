@@ -8,6 +8,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
+#include <poll.h>
 
 namespace catman
 {
@@ -38,6 +39,7 @@ Acceptor* Acceptor::open(const Session &session)
 
 Acceptor::Acceptor(int fd, const Session &session) : PollIO(fd), m_session(session.clone())
 {
+	m_event |= POLLIN;
 }
 
 Acceptor::~Acceptor()

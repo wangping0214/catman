@@ -25,11 +25,7 @@ PollTask& PollTask::instance()
 
 void PollTask::run()
 {
-	/*
-	char msg[128];
-	sprintf(msg, "Poll from thread: %lu\n", pthread_self());
-	LOG4CXX_DEBUG(logger, msg);*/
-	Poller::instance().poll(1000);
+	Poller::instance().poll(10000);
 	thread::ThreadPool::instance().execute(this);
 }
 

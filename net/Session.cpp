@@ -15,10 +15,14 @@ thread::Mutex Session::s_seedLock;
 
 Session::Session(SessionManager *manager) : m_pollIO(NULL), m_manager(manager), m_id(nextId()), m_closing(false)
 {
+	m_inBuffer.reserve(8192); 	//TODO
+	m_outBuffer.reserve(8192); 	//TODO
 }
 
 Session::Session(const Session &other) : m_pollIO(other.m_pollIO), m_manager(other.m_manager), m_id(nextId()), m_closing(other.m_closing) 
 {
+	m_inBuffer.reserve(8192); 	//TODO
+	m_outBuffer.reserve(8192); 	//TODO
 }
 
 Session::~Session()
@@ -33,6 +37,7 @@ Session* Session::clone() const
 bool Session::send(common::Octets buff)
 {
 	m_outBuffer.insert(m_outBuffer.begin(), buff.begin(), buff.end());
+	m_pollIO->permitSend();
 	return true;
 }
 

@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
+#include <poll.h>
 
 namespace catman
 {
@@ -40,6 +41,8 @@ Connector* Connector::open(const Session &session)
 Connector::Connector(int fd, const struct sockaddr &addr, const Session &session) : PollIO(fd), m_session(session.clone())
 {
 	connect(m_fd, &addr, sizeof(addr));	//TODO
+	m_event |= POLLIN;
+	m_event |= POLLOUT;
 }
 
 Connector::~Connector()

@@ -12,8 +12,6 @@ namespace net
 PollIO::PollIO(int fd) : m_fd(fd), m_event(0)
 {
 	fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL) | O_NONBLOCK);
-	m_event |= POLLIN; 	// TODO
-	m_event |= POLLOUT;
 }
 
 PollIO::~PollIO()

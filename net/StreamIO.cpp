@@ -2,6 +2,7 @@
 #include <catman/net/Session.h>
 #include <unistd.h>
 #include <errno.h>
+#include <poll.h>
 
 namespace catman
 {
@@ -10,6 +11,7 @@ namespace net
 
 StreamIO::StreamIO(int fd, Session *session) : SessionIO(fd, session)
 {
+	m_event |= POLLIN;
 	m_session->onOpen();
 }
 

@@ -10,6 +10,10 @@ namespace catman
 namespace net
 {
 
+class Acceptor;
+class Connector;
+class StreamIO;
+
 enum
 {
 	POLLCLOSE = 0x80000000
@@ -17,8 +21,11 @@ enum
 
 class PollIO
 {
+	friend class Acceptor;
+	friend class Connector;
+	friend class StreamIO;
 public:
-	~PollIO();
+	virtual ~PollIO();
 	/* trigger by POLLIN event from socket */
 	virtual void pollIn() = 0;
 	/* trigger by POLLOUT event from sockt */

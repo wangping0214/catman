@@ -257,7 +257,7 @@ Octets& Octets::insert(void *pos, const void *buff, size_t len)
 {
 	ptrdiff_t offset = (char*)pos - (char*)m_base;
 	reserve(size() + len);
-	pos = (char*)pos + offset;
+	pos = (char*)m_base + offset;
 	size_t adjust = size() - offset;
 	if (adjust)
 		fast_memmove((char*)pos + len, pos, len);

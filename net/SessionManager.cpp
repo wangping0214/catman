@@ -14,6 +14,15 @@ SessionManager::~SessionManager()
 {
 }
 
+bool SessionManager::send(size_t sessionId, common::Octets data)
+{
+	thread::ReadLocker locker(&m_mapRWLock);
+	Session *s = session(sessionId);
+	if (NULL != s)
+		return s->send(data);
+	return false;
+}
+
 bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);

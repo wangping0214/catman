@@ -1,10 +1,13 @@
 #include <catman/common/Protocol.h>
 #include <catman/common/OctetsStream.h>
+#include <catman/common/LogUtil.h>
 
 namespace catman
 {
 namespace common
 {
+
+log4cxx::LoggerPtr Protocol::logger(log4cxx::Logger::getLogger("catman/common/Protocol"));
 
 Protocol::TypeProtocolMap Protocol::protocolStubs;
 

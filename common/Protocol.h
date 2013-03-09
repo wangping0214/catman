@@ -7,6 +7,7 @@
 
 #include <catman/common/Marshal.h>
 #include <catman/common/Octets.h>
+#include <log4cxx/logger.h>
 #include <map>
 #include <cstddef>
 
@@ -46,6 +47,8 @@ protected:
 	size_t m_type;
 private:
 	static TypeProtocolMap protocolStubs;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }
