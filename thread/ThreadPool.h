@@ -5,13 +5,12 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "Thread.h"
-#include "Mutex.h"
-#include "Condition.h"
+#include <catman/thread/Thread.h>
+#include <catman/thread/Mutex.h>
+#include <catman/thread/Condition.h>
 #include <log4cxx/logger.h>
 #include <deque>
 #include <vector>
-#include <stdio.h>
 
 namespace catman
 {

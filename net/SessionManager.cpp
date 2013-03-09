@@ -1,5 +1,5 @@
-#include "SessionManager.h"
-#include "Session.h"
+#include <catman/net/SessionManager.h>
+#include <catman/net/Session.h>
 
 namespace catman
 {

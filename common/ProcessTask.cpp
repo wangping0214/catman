@@ -1,5 +1,5 @@
-#include "ProcessTask.h"
-#include "Protocol.h"
+#include <catman/common/ProcessTask.h>
+#include <catman/common/Protocol.h>
 
 namespace catman
 {

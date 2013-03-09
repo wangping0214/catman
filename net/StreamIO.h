@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "SessionIO.h"
+#include <catman/net/SessionIO.h>
  
 namespace catman
 {

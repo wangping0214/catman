@@ -1,4 +1,4 @@
-#include "Condition.h"
+#include <catman/thread/Condition.h>
 
 namespace catman
 {

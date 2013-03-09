@@ -5,8 +5,8 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "Marshal.h"
-#include "Octets.h"
+#include <catman/common/Marshal.h>
+#include <catman/common/Octets.h>
 #include <map>
 #include <cstddef>
 

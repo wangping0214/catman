@@ -1,5 +1,5 @@
-#include "PollTask.h"
-#include "Poller.h"
+#include <catman/net/PollTask.h>
+#include <catman/net/Poller.h>
 #include <catman/thread/ThreadPool.h>
 
 namespace catman

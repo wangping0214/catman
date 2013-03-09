@@ -1,4 +1,4 @@
-#include "ReadWriteLock.h"
+#include <catman/thread/ReadWriteLock.h>
 
 namespace catman
 {

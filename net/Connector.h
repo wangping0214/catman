@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "PollIO.h"
+#include <catman/net/PollIO.h>
 #include <log4cxx/logger.h>
 #include <sys/socket.h>
 

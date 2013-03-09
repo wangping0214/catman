@@ -1,5 +1,5 @@
-#include "Poller.h"
-#include "PollIO.h"
+#include <catman/net/Poller.h>
+#include <catman/net/PollIO.h>
 #include <algorithm>
 #include <poll.h>
 

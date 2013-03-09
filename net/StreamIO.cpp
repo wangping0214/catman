@@ -1,5 +1,5 @@
-#include "StreamIO.h"
-#include "Session.h"
+#include <catman/net/StreamIO.h>
+#include <catman/net/Session.h>
 #include <unistd.h>
 #include <errno.h>
 

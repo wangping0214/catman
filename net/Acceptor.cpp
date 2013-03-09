@@ -1,7 +1,7 @@
-#include "Acceptor.h"
-#include "Poller.h"
-#include "Session.h"
-#include "StreamIO.h"
+#include <catman/net/Acceptor.h>
+#include <catman/net/Poller.h>
+#include <catman/net/Session.h>
+#include <catman/net/StreamIO.h>
 #include <catman/common/Configuration.h>
 #include <stddef.h>
 #include <sys/socket.h>

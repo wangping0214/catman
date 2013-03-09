@@ -1,4 +1,4 @@
-#include "OctetsStream.h"
+#include <catman/common/OctetsStream.h>
 #include <string.h>
 
 namespace catman

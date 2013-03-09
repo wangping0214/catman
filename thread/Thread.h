@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "Runnable.h"
+#include <catman/net/Runnable.h>
 #include <pthread.h>
  
 namespace catman

@@ -1,5 +1,5 @@
-#include "Configuration.h"
-#include "catman/tinyxml2/tinyxml2.h"
+#include <catman/common/Configuration.h>
+#include <catman/tinyxml2/tinyxml2.h>
 
 namespace catman
 {

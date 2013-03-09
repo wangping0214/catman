@@ -1,4 +1,4 @@
-#include "Thread.h"
+#include <catman/thread/Thread.h>
 
 namespace catman
 {

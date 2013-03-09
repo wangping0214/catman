@@ -5,7 +5,7 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include "Mutex.h"
+#include <catman/thread/Mutex.h>
  
 namespace catman
 {

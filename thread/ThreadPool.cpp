@@ -1,4 +1,4 @@
-#include "ThreadPool.h"
+#include <catman/thread/ThreadPool.h>
 #include <unistd.h>
 
 namespace catman

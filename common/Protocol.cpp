@@ -1,5 +1,5 @@
-#include "Protocol.h"
-#include "OctetsStream.h"
+#include <catman/common/Protocol.h>
+#include <catman/common/OctetsStream.h>
 
 namespace catman
 {
