@@ -5,14 +5,12 @@
  * Keep it simple at first 
  *************************************************************/
 
+#include <log4cxx/logger.h>
+
 namespace catman
 {
 namespace net
 {
-
-class Acceptor;
-class Connector;
-class StreamIO;
 
 enum
 {
@@ -21,9 +19,6 @@ enum
 
 class PollIO
 {
-	friend class Acceptor;
-	friend class Connector;
-	friend class StreamIO;
 public:
 	virtual ~PollIO();
 	/* trigger by POLLIN event from socket */
@@ -43,8 +38,9 @@ protected:
 	PollIO(int fd);
 protected:
 	int m_fd;
-private:
 	int m_event;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

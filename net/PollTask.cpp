@@ -25,7 +25,7 @@ PollTask& PollTask::instance()
 
 void PollTask::run()
 {
-	Poller::instance().poll(10000);
+	Poller::instance().poll(-1);
 	thread::ThreadPool::instance().execute(this);
 }
 

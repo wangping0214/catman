@@ -4,6 +4,9 @@
 #include <algorithm>
 #include <poll.h>
 #include <stdio.h>
+#include <assert.h>
+#include <fcntl.h>
+#include <errno.h>
 
 namespace catman
 {
@@ -12,8 +15,59 @@ namespace net
 
 log4cxx::LoggerPtr Poller::logger(log4cxx::Logger::getLogger("catman/net/Poller"));
 
-Poller::Poller()
+bool Poller::PollControl::s_initFlag = false;
+
+Poller::PollControl& Poller::PollControl::instance()
 {
+	static int pipefds[2];
+	if (!s_initFlag)
+	{
+		::pipe(pipefds);
+		s_initFlag = true;
+	}
+	static PollControl pollControl(pipefds[0], pipefds[1]);
+	return pollControl;
+}
+
+Poller::PollControl::PollControl(int pipeRead, int pipeWrite) : PollIO(pipeRead), m_pipeWrite(pipeWrite)
+{
+	fcntl(m_pipeWrite, F_SETFL, fcntl(m_fd, F_GETFL) | O_NONBLOCK);
+	m_event |= POLLIN;
+}
+
+Poller::PollControl::~PollControl()
+{
+	while (::close(m_pipeWrite) == -1 && errno == EINTR)
+		;
+}
+
+void Poller::PollControl::wakeup()
+{
+	pollOut();
+}
+
+void Poller::PollControl::pollIn()
+{
+	::read(m_fd, m_msg, sizeof(m_msg));
+}
+
+void Poller::PollControl::pollOut()
+{
+	::write(m_pipeWrite, m_msg, sizeof(m_msg));
+}
+
+void Poller::PollControl::detectCloseEvent()
+{
+}
+
+///////////////////////////////////////////////////////
+
+Poller::Poller() : m_maxfd(0)
+{
+	FD_ZERO(&m_readSet);
+	FD_ZERO(&m_writeSet);
+	//TODO add PollControl
+	registerPollIO(&PollControl::instance());
 }
 
 Poller::~Poller()
@@ -53,8 +107,23 @@ void Poller::poll(int timeout)
 	}
 }
 
+void Poller::wakeup()
+{
+	PollControl::instance().wakeup();
+}
+
+thread::Mutex& Poller::eventLock() 
+{
+	return m_eventLock;
+}
+
 void Poller::updateEvent()
 {
+	/* When Poller is fetching event from PollIOs,
+	 * all PollIOs are forbidden to update their
+	 * events. */
+	thread::MutexLocker locker(&m_eventLock);
+
 	for (IOMap::iterator it = m_ioMap.begin(), ie = m_ioMap.end(); it != ie; ++ it)
 	{
 		PollIO *pollIO = it->second;
@@ -96,6 +165,7 @@ void Poller::updateEvent()
 void Poller::triggerEvent(int fd)
 {
 	PollIO *pollIO = m_ioMap[fd];
+	assert(pollIO != NULL);
 	if (FD_ISSET(fd, &m_readSet))
 		pollIO->pollIn();
 	if (FD_ISSET(fd, &m_writeSet))

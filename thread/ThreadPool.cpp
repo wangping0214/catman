@@ -35,7 +35,7 @@ void ThreadPool::ThreadPoolThread::stop()
 ThreadPool& ThreadPool::instance()
 {
 	// must be configurable
-	static ThreadPool pool(1);
+	static ThreadPool pool(4);
 	return pool;
 }
 

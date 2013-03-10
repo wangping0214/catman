@@ -39,9 +39,11 @@ void StreamIO::pollIn()
 			// if inBuffer is full now.
 			if (inBuffer.capacity() == inBuffer.size())
 				forbidRecv();
+			return;
 		}
 	}
 	while (recvSize == -1 && errno == EINTR); // was interrupted by signal, then retry.
+	common::LogDebug(logger, "RecvSize=%d, errno=%d", recvSize, errno);
 	// recvSize == 0 means no message are available or peer has done an orderly shutdown.
 	if (recvSize != -1 || errno != EAGAIN)
 	{
