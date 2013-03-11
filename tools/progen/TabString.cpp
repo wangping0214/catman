@@ -1,4 +1,5 @@
 #include "TabString.h"
+#include <string.h>
 
 TabString::TabString()
 {

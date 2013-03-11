@@ -1,6 +1,7 @@
 #include "Field.h"
+#include "TabString.h"
 
-Field::Field(const tinyxml2::XMLAttribute *fieldElem) : m_name(fieldElem->Attribute("name")), 
+Field::Field(const tinyxml2::XMLElement *fieldElem) : m_name(fieldElem->Attribute("name")), 
 	m_type(fieldElem->Attribute("type")), m_attr(fieldElem->Attribute("attr"))
 {
 }
@@ -9,7 +10,7 @@ Field::~Field()
 {
 }
 
-void Field::write(FILE *destFile, int tabCount);
+void Field::write(FILE *destFile, int tabCount) const
 {
 	fprintf(destFile, "%s%s %s;\n", TabString::get(tabCount), m_type.c_str(), m_name.c_str());
 }

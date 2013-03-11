@@ -10,7 +10,7 @@ class Field
 public:
 	Field(const tinyxml2::XMLElement *fieldElem);
 	~Field();
-	void write(FILE* destFile, int tabCount);
+	void write(FILE* destFile, int tabCount) const;
 	const std::string& name() const;
 	const std::string& type() const;
 	const std::string& attr() const;

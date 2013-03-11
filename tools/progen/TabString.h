@@ -2,6 +2,7 @@
 #define TABSTRING_H
 
 #include <map>
+#include <stddef.h>
 
 class TabString
 {

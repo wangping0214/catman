@@ -1,5 +1,7 @@
 #include "ProDef.h"
 #include "TabString.h"
+#include <algorithm>
+#include <iterator>
 
 ProDef::ProDef(const tinyxml2::XMLElement *proElem) : m_name(proElem->Attribute("name"))
 {
@@ -25,7 +27,7 @@ void ProDef::write(const std::string &path, int tabCount)
 	volatileFilePath += m_name;
 	FILE *volatileFile = fopen(volatileFilePath.c_str(), "w+");
 	assert(NULL != volatileFile);
-	writeVolatile(volatileFile);
+	writeVolatile(volatileFile, tabCount);
 	fclose(volatileFile);
 	// steady part
 	std::string steadyFilePath(dirPath);
@@ -47,9 +49,9 @@ void ProDef::writeVolatile(FILE *destFile, int tabCount)
 void ProDef::writeSteady(FILE *destFile, int tabCount)
 {
 	std::string upperName;
-	std::transform(m_name.begin(), m_name.end(), std::back_inserter(upperName), std::toupper);
+	std::transform(m_name.begin(), m_name.end(), std::back_inserter(upperName), toupper);
 	fprintf(destFile, "%s#ifndef %s_H\n", TabString::get(tabCount), upperName.c_str());
-	fprintf(destFile, "%S#define %s_H\n", TabString::get(tabCount), upperName.c_str());
+	fprintf(destFile, "%s#define %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "\n");
 	fprintf(destFile, "%sclass %s : public catman::common::Protocol\n", TabString::get(tabCount), m_name.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));

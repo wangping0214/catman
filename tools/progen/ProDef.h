@@ -3,6 +3,8 @@
 
 #include <catman/tinyxml2/tinyxml2.h>
 #include "Field.h"
+#include <vector>
+#include <assert.h>
 
 class ProDef
 {
