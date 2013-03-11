@@ -15,4 +15,5 @@
 # Specified files
 *cscope*
 *tags
-
+tools/progen/progen
+test/prodef/
