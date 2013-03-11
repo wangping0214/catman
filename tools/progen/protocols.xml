@@ -4,4 +4,7 @@
 		<variable name="userName" type="std::string" attr="ref"/>
 		<variable name="password" type="std::string" attr="ref"/>
 	</protocol>
+	<protocol name="LoginResponse" type="2">
+		<variable name="loginResult" type="std::string" attr="ref"/>
+	</protocol>
 </application>

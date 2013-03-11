@@ -1,10 +1,14 @@
 #include <catman/net/SessionManager.h>
 #include <catman/net/Session.h>
+#include <catman/common/LogUtil.h>
+#include <assert.h>
 
 namespace catman
 {
 namespace net
 {
+
+log4cxx::LoggerPtr SessionManager::logger(log4cxx::Logger::getLogger("catman/net/SessionManager"));
 
 SessionManager::SessionManager()
 {
@@ -29,6 +33,8 @@ bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
 	Session *s = session(sessionId);
 	if (NULL != s)
 		return s->send(protocol);
+	else
+		common::LogDebug(logger, "session %lu is NULL", sessionId);
 	return false;
 }
 

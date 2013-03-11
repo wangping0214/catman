@@ -12,31 +12,30 @@
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/consoleappender.h>
 #include <log4cxx/patternlayout.h>
-#include "RemoteLog.h"
+#include <PlayerLogin.h>
+#include <LoginResponse.h>
 
 using namespace std;
 
-log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("myapp"));
+log4cxx::LoggerPtr g_logger(log4cxx::Logger::getLogger("myapp"));
+
+PlayerLogin g_PlayerLogin;
+LoginResponse g_LoginResponse;
 
 class Server : public catman::net::SessionManager
 {
 public:
 	virtual void onAddSession(size_t sessionId)
 	{
-		catman::common::LogDebug(logger, "OnAddSession: %lu", sessionId);
-		std::string str("Message from Server");
-		RemoteLog rl;
-		rl.message = str;
-//		send(sessionId, (catman::common::Octets)stream);
-		send(sessionId, rl);
+		catman::common::LogDebug(g_logger, "OnAddSession: %lu", sessionId);
 	}
 	virtual void onDeleteSession(size_t sessionId)
 	{
-		std::cout << "OnDelSession: " << sessionId << endl;
+		catman::common::LogDebug(g_logger, "OnDelSession: %lu", sessionId);
 	}
 	virtual void onAbortSession(size_t sessionId)
 	{
-		catman::common::LogDebug(logger, "OnAbortSession: %lu", sessionId);
+		catman::common::LogDebug(g_logger, "OnAbortSession: %lu", sessionId);
 	}
 };
 
@@ -47,7 +46,7 @@ int main(int argc, char *argv[])
 	log4cxx::PatternLayout layout("%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c %L %-5p - %m%n");
 	log4cxx::ConsoleAppender appender(&layout);
 	log4cxx::Logger::getRootLogger()->addAppender(&appender);
-	LOG4CXX_INFO(logger, string("Server"));
+	LOG4CXX_INFO(g_logger, string("Server"));
 
 	catman::common::Configuration::instance("catman.xml");
 	Server server;

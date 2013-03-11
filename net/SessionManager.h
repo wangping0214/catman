@@ -7,6 +7,7 @@
 
 #include <catman/common/Octets.h>
 #include <catman/thread/ReadWriteLock.h>
+#include <log4cxx/logger.h>
 #include <map>
  
 namespace catman
@@ -45,6 +46,8 @@ private:
 private:
 	IdSessionMap m_idSessionMap;
 	thread::ReadWriteLock m_mapRWLock;
+
+	static log4cxx::LoggerPtr logger;
 };
 
 }

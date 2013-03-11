@@ -62,7 +62,7 @@ void Poller::PollControl::detectCloseEvent()
 
 ///////////////////////////////////////////////////////
 
-Poller::Poller() : m_maxfd(0)
+Poller::Poller() : m_maxfd(0), m_eventLock("Poller_eventLock")
 {
 	FD_ZERO(&m_readSet);
 	FD_ZERO(&m_writeSet);
@@ -135,6 +135,7 @@ void Poller::updateEvent()
 			FD_CLR(fd, &m_readSet);
 			FD_CLR(fd, &m_writeSet);
 			//m_ioMap[fd] = NULL; // must erase
+			// TODO deadlock arises
 			m_ioMap.erase(it);
 			delete pollIO;
 		}

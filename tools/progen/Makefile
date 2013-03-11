@@ -1,7 +1,7 @@
 CXX = g++
 FLAGS = -ggdb -Wall
 INCLUDES = -I../../../
-LIBS = ../../libcatman.so -lpthread
+LIBS = ../../libcatman.so -llog4cxx -lpthread
 CPPFILES = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))
 EXE = progen

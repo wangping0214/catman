@@ -1,6 +1,6 @@
 CXX = g++ 
 FLAGS = -ggdb -Wall
-INCLUDES = -I/home/alan/workspace
+INCLUDES = -I/home/alan/workspace -I./prodef
 LIBS = ../libcatman.so -llog4cxx -lpthread
 #CPPFILES = $(wildcard *.cpp)
 #OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))
@@ -39,7 +39,7 @@ OctetsTest.o : OctetsTest.cpp
 #	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 clean :
-	rm -r $(wildcard *.o) test Server Client OctetsTest
+	rm -r $(wildcard *.o) Server Client OctetsTest
 #-rm -r $(OBJS) $(EXE) Server Client
 
 

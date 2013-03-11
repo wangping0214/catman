@@ -6,19 +6,32 @@
 
 void usage()
 {
-	printf("Usage: progen protocols.xml [output_path]");
+	printf("Usage: progen -d protocols.xml [-o output_path]");
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
+	std::string proFile;
+	std::string outPath;
+	int optval;
+	while((optval = getopt(argc, argv, "d:o:")) != -1)
 	{
-		usage();
-		return 0;
+		switch(optval)
+		{
+		case 'd':
+			proFile = optarg;
+			break;
+		case 'o':
+			outPath = optarg;
+			break;
+		default:
+			usage();
+			break;
+		}
 	}
 	tinyxml2::XMLDocument proDoc;
-	if (proDoc.LoadFile(argv[1]) != 0)
-		printf("Failed to load %s\n", argv[1]);
+	if (proDoc.LoadFile(proFile.c_str()) != 0)
+		printf("Failed to load %s\n", proFile.c_str());
 	tinyxml2::XMLElement *appElem = proDoc.RootElement();
 	std::string ns(appElem->Attribute("namespace"));
 	for (tinyxml2::XMLElement *elem = appElem->FirstChildElement(); elem != NULL; elem = elem->NextSiblingElement())
@@ -27,7 +40,7 @@ int main(int argc, char *argv[])
 		if ("protocol" == genType)
 		{
 			ProDef proDef(elem);
-			proDef.write(std::string(), 1);
+			proDef.write(outPath, 1);
 		}
 		// else if
 	}

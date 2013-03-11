@@ -39,7 +39,7 @@ ThreadPool& ThreadPool::instance()
 	return pool;
 }
 
-ThreadPool::ThreadPool(size_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize)
+ThreadPool::ThreadPool(size_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize), m_queueLock("ThreadPool_queueLock")
 {
 }
 

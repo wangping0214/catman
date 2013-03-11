@@ -14,15 +14,15 @@ namespace net
 log4cxx::LoggerPtr Session::logger(log4cxx::Logger::getLogger("catman/net/Session"));
 
 size_t Session::s_idSeed = 0;
-thread::Mutex Session::s_seedLock;
+thread::Mutex Session::s_seedLock("Session_seedLock");
 
-Session::Session(SessionManager *manager) : m_pollIO(NULL), m_manager(manager), m_id(nextId()), m_closing(false)
+Session::Session(SessionManager *manager) : m_pollIO(NULL), m_outLock("Session_outLock"), m_manager(manager), m_id(nextId()), m_closing(false) 
 {
 	m_inBuffer.reserve(8192); 	//TODO
 	m_outBuffer.reserve(8192); 	//TODO
 }
 
-Session::Session(const Session &other) : m_pollIO(other.m_pollIO), m_manager(other.m_manager), m_id(nextId()), m_closing(other.m_closing) 
+Session::Session(const Session &other) : m_pollIO(other.m_pollIO), m_outLock("Session_outLock"), m_manager(other.m_manager), m_id(nextId()), m_closing(other.m_closing)
 {
 	m_inBuffer.reserve(8192); 	//TODO
 	m_outBuffer.reserve(8192); 	//TODO
