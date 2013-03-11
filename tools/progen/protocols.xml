@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application namespace="">
+	<protocol name="PlayerLogin" type="1">
+		<variable name="userName" type="std::string" attr="ref"/>
+		<variable name="password" type="std::string" attr="ref"/>
+	</protocol>
+</application>
