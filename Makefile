@@ -1,6 +1,7 @@
 CXX = g++ -fPIC
 FLAGS = -ggdb -Wall
-INCLUDES = -I/home/alan/workspace
+#INCLUDES = -I/home/alan/workspace
+INCLUDES = -I..
 LIBS = -lpthread
 CPPFILES = $(wildcard ./common/*.cpp) $(wildcard ./net/*.cpp) $(wildcard ./thread/*.cpp) $(wildcard ./tinyxml2/*.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))
