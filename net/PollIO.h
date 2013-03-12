@@ -25,7 +25,7 @@ public:
 	virtual void pollIn() = 0;
 	/* trigger by POLLOUT event from sockt */
 	virtual void pollOut() = 0;
-	/* Detect close event from Session */
+	/* Detect close event from Session or POLLIN and POLLOUT */
 	virtual void detectCloseEvent() = 0;
 	void permitRecv();
 	void permitSend();
@@ -34,11 +34,15 @@ public:
 	void close();
 	int fileDescriptor() const;
 	int event() const;
+	/* It's not thread-safe, the caller must acquire lock outside. */
+	void synchronizeEvent();
 protected:
 	PollIO(int fd);
 protected:
 	int m_fd;
 	int m_event;
+	int m_cachedEvent;
+	bool m_eventDirty;
 
 	static log4cxx::LoggerPtr logger;
 };

@@ -89,7 +89,8 @@ PollIO* Poller::registerPollIO(PollIO *pollIO)
 void Poller::poll(int timeout)
 {
 	updateEvent();
-
+	// It's a good time to wakeup, then select will return immediately
+	m_canWakeup = true;
 	int eventCount;
 	if (timeout < 0)
 		eventCount = ::select(m_maxfd + 1, &m_readSet, &m_writeSet, NULL, NULL);
@@ -100,6 +101,8 @@ void Poller::poll(int timeout)
 		tv.tv_usec = (timeout % 1000) * 1000;
 		eventCount = ::select(m_maxfd + 1, &m_readSet, &m_writeSet, NULL, &tv);
 	}
+	// select has returned, wakeup is unnecessary
+	m_canWakeup = false;
 	if (eventCount > 0)
 	{
 		for (FDSet::const_iterator it = m_fdSet.begin(), ie = m_fdSet.end(); it != ie; ++ it)
@@ -107,14 +110,24 @@ void Poller::poll(int timeout)
 	}
 }
 
-void Poller::wakeup()
+void Poller::onPollIOEventChanged(PollIO *pollIO)
 {
-	PollControl::instance().wakeup();
+	m_dirtyIOSet.insert(pollIO);
+	wakeup();
 }
 
 thread::Mutex& Poller::eventLock() 
 {
 	return m_eventLock;
+}
+
+void Poller::wakeup()
+{
+	if (m_canWakeup)
+	{
+		m_canWakeup = false;
+		PollControl::instance().wakeup();
+	}
 }
 
 void Poller::updateEvent()

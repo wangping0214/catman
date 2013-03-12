@@ -14,7 +14,7 @@ namespace net
 
 log4cxx::LoggerPtr PollIO::logger(log4cxx::Logger::getLogger("catman/net/PollIO"));
 
-PollIO::PollIO(int fd) : m_fd(fd), m_event(0)
+PollIO::PollIO(int fd) : m_fd(fd), m_event(0), m_cachedEvent(0), m_eventDirty(false)
 {
 	fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL) | O_NONBLOCK);
 }
@@ -28,41 +28,64 @@ PollIO::~PollIO()
 void PollIO::permitRecv()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
-	m_event |= POLLIN;
-	common::LogDebug(logger, "permitRecv: wakeup");
-	Poller::instance().wakeup();
+	if (m_eventDirty)
+		m_cachedEvent |= POLLIN;
+	{
+		m_cachedEvent = m_event | POLLIN;
+		m_eventDirty = true;
+		Poller::instance().onPollIOEventChanged(this);
+		// Notify Poller the current PollIO has dirty event 
+	}
 }
 
 void PollIO::permitSend()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
-	m_event |= POLLOUT;
-	common::LogDebug(logger, "permitSend: wakeup");
-	Poller::instance().wakeup();
+	if (m_eventDirty)
+		m_cachedEvent |= POLLOUT;
+	else
+	{
+		m_cachedEvent = m_event | POLLOUT;
+		m_eventDirty = true;
+		Poller::instance().onPollIOEventChanged(this);
+		// Notify Poller the current PollIO has dirty event
+	}
 }
 
 void PollIO::forbidRecv()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
-	m_event &= ~POLLIN;
-	common::LogDebug(logger, "forbidRecv: wakeup");
-	Poller::instance().wakeup();
+	if (m_eventDirty)
+		m_cachedEvent |= ~POLLIN;
+	else
+	{
+		m_cachedEvent = m_event & ~POLLIN;
+		m_eventDirty = true;
+		Poller::instance().onPollIOEventChanged(this);
+		// Notify Poller the current PollIO has dirty event
+	}
 }
 
 void PollIO::forbidSend()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
-	m_event &= ~POLLOUT;
-	common::LogDebug(logger, "forbidSend: wakeup");
-	Poller::instance().wakeup();
+	if (m_eventDirty)
+		m_cachedEvent |= ~POLLOUT;
+	else
+	{
+		m_cachedEvent = m_event & ~POLLOUT;
+		m_eventDirty = true;
+		Poller::instance().onPollIOEventChanged(this);
+		// Notify Poller the current PollIO has dirty event
+	}
 }
 
 void PollIO::close()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
 	m_event |= POLLCLOSE;
-	common::LogDebug(logger, "close: wakeup");
-	Poller::instance().wakeup();
+	if (!m_eventDirty)
+		Poller::instance().onPollIOEventChanged(this);
 }
 
 int PollIO::fileDescriptor() const
@@ -73,6 +96,13 @@ int PollIO::fileDescriptor() const
 int PollIO::event() const
 {
 	return m_event;
+}
+
+void PollIO::synchronizeEvent()
+{
+	m_event = m_cachedEvent;
+	m_cachedEvent = 0;
+	m_eventDirty = false;
 }
 
 }
