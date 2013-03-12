@@ -51,11 +51,14 @@ public:
 private:
 	Poller();
 	void wakeup();
-	void updateEvent();
+	// synchronize events incremently
+	void synchronizeEvent();
+	//void updateEvent();
 	void triggerEvent(int fd);
 private:
 	FDSet m_fdSet;
 	fd_set m_readSet, m_writeSet;
+	fd_set m_pollReadSet, m_pollWriteSet;
 	int m_maxfd;
 	IOMap m_ioMap;
 	IOSet m_dirtyIOSet;

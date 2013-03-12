@@ -12,9 +12,8 @@ namespace net
 
 log4cxx::LoggerPtr StreamIO::logger(log4cxx::Logger::getLogger("catman/net/StreamIO"));
 
-StreamIO::StreamIO(int fd, Session *session) : SessionIO(fd, session)
+StreamIO::StreamIO(int fd, int initEvent, Session *session) : SessionIO(fd, initEvent, session)
 {
-	m_event |= POLLIN;
 	m_session->onOpen();
 }
 
@@ -43,7 +42,7 @@ void StreamIO::pollIn()
 		}
 	}
 	while (recvSize == -1 && errno == EINTR); // was interrupted by signal, then retry.
-	common::LogDebug(logger, "RecvSize=%d, errno=%d", recvSize, errno);
+//	common::LogDebug(logger, "RecvSize=%d, errno=%d", recvSize, errno);
 	// recvSize == 0 means no message are available or peer has done an orderly shutdown.
 	if (recvSize != -1 || errno != EAGAIN)
 	{

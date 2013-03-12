@@ -17,7 +17,7 @@ class Session;
 class SessionIO : public PollIO
 {
 protected:
-	SessionIO(int fd, Session *session);
+	SessionIO(int fd, int initEvent, Session *session);
 protected:
 	Session *m_session;
 };

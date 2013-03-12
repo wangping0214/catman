@@ -34,12 +34,11 @@ Acceptor* Acceptor::open(const Session &session)
 	setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &val, sizeof(val));
 	bind(sockfd, (struct sockaddr*)&addr, sizeof(sockaddr_in));
 	listen(sockfd, SOMAXCONN);
-	return (Acceptor*)Poller::instance().registerPollIO(new Acceptor(sockfd, session));
+	return (Acceptor*)Poller::instance().registerPollIO(new Acceptor(sockfd, POLLIN, session));
 }
 
-Acceptor::Acceptor(int fd, const Session &session) : PollIO(fd), m_session(session.clone())
+Acceptor::Acceptor(int fd, int initEvent, const Session &session) : PollIO(fd, initEvent), m_session(session.clone())
 {
-	m_event |= POLLIN;
 }
 
 Acceptor::~Acceptor()
@@ -51,7 +50,7 @@ void Acceptor::pollIn()
 {
 	int peerfd = accept(m_fd, NULL, NULL);
 	if (-1 != peerfd)
-		Poller::instance().registerPollIO(new StreamIO(peerfd, m_session->clone())); //TODO
+		Poller::instance().registerPollIO(new StreamIO(peerfd, POLLIN, m_session->clone())); //TODO
 }
 
 void Acceptor::pollOut()

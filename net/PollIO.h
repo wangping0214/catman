@@ -37,7 +37,7 @@ public:
 	/* It's not thread-safe, the caller must acquire lock outside. */
 	void synchronizeEvent();
 protected:
-	PollIO(int fd);
+	PollIO(int fd, int initEvent);
 protected:
 	int m_fd;
 	int m_event;

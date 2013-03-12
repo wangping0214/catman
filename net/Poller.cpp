@@ -29,10 +29,9 @@ Poller::PollControl& Poller::PollControl::instance()
 	return pollControl;
 }
 
-Poller::PollControl::PollControl(int pipeRead, int pipeWrite) : PollIO(pipeRead), m_pipeWrite(pipeWrite)
+Poller::PollControl::PollControl(int pipeRead, int pipeWrite) : PollIO(pipeRead, POLLIN), m_pipeWrite(pipeWrite)
 {
 	fcntl(m_pipeWrite, F_SETFL, fcntl(m_fd, F_GETFL) | O_NONBLOCK);
-	m_event |= POLLIN;
 }
 
 Poller::PollControl::~PollControl()
@@ -66,6 +65,8 @@ Poller::Poller() : m_maxfd(0), m_eventLock("Poller_eventLock")
 {
 	FD_ZERO(&m_readSet);
 	FD_ZERO(&m_writeSet);
+	FD_ZERO(&m_pollReadSet);
+	FD_ZERO(&m_pollWriteSet);
 	//TODO add PollControl
 	registerPollIO(&PollControl::instance());
 }
@@ -82,24 +83,24 @@ Poller& Poller::instance()
 
 PollIO* Poller::registerPollIO(PollIO *pollIO)
 {
+	thread::MutexLocker locker(&m_eventLock);
 	m_ioMap[pollIO->fileDescriptor()] = pollIO;
+	onPollIOEventChanged(pollIO);
 	return pollIO;
 }
 
 void Poller::poll(int timeout)
 {
-	updateEvent();
-	// It's a good time to wakeup, then select will return immediately
-	m_canWakeup = true;
+	synchronizeEvent();
 	int eventCount;
 	if (timeout < 0)
-		eventCount = ::select(m_maxfd + 1, &m_readSet, &m_writeSet, NULL, NULL);
+		eventCount = ::select(m_maxfd + 1, &m_pollReadSet, &m_pollWriteSet, NULL, NULL);
 	else
 	{
 		struct timeval tv;
 		tv.tv_sec = timeout / 1000;
 		tv.tv_usec = (timeout % 1000) * 1000;
-		eventCount = ::select(m_maxfd + 1, &m_readSet, &m_writeSet, NULL, &tv);
+		eventCount = ::select(m_maxfd + 1, &m_pollReadSet, &m_pollWriteSet, NULL, &tv);
 	}
 	// select has returned, wakeup is unnecessary
 	m_canWakeup = false;
@@ -130,11 +131,69 @@ void Poller::wakeup()
 	}
 }
 
+/* Only invoked by poll thread */
+void Poller::synchronizeEvent()
+{
+	IOSet tmpIOSet;
+	{
+		thread::MutexLocker locker(&m_eventLock);
+		for (IOSet::iterator it = m_dirtyIOSet.begin(), ie = m_dirtyIOSet.end(); it != ie; ++ it)
+		{	
+			(*it)->synchronizeEvent();
+			tmpIOSet.insert(*it);
+		}
+		m_dirtyIOSet.clear();
+		/* Because PollIO is register before poll, if Connector connect successfully,
+		 * but the new connected Poll must wait until next poll operation, so we must
+		 * make sure the current poll be wakeup. */
+		m_canWakeup = true;
+	}
+	// synchronize interesting events of fd_set	
+	for (IOSet::iterator it = tmpIOSet.begin(), ie = tmpIOSet.end(); it != ie; ++ it)
+	{
+		PollIO *pollIO = (*it);
+		int fd = pollIO->fileDescriptor();
+		int newEvent = pollIO->event();
+		if (newEvent & POLLCLOSE)
+		{
+			FD_CLR(fd, &m_readSet);
+			FD_CLR(fd, &m_writeSet);
+			m_ioMap.erase(fd);
+			delete pollIO;
+		}
+		else
+		{
+			if (newEvent & POLLIN)
+				FD_SET(fd, &m_readSet);
+			else
+				FD_CLR(fd, &m_readSet);
+
+			if (newEvent & POLLOUT)
+				FD_SET(fd, &m_writeSet);
+			else
+				FD_CLR(fd, &m_writeSet);
+
+			m_maxfd = std::max(m_maxfd, fd);
+		}
+	}
+	// synchronize all interesting fds
+	m_fdSet.clear();
+	for (int i = 0; i <= m_maxfd; ++ i)
+	{
+		if (FD_ISSET(i, &m_readSet) || FD_ISSET(i, &m_writeSet))
+			m_fdSet.push_back(i);
+	}
+	// synchronize fd_set to poll
+	m_pollReadSet = m_readSet;
+	m_pollWriteSet = m_writeSet;
+}
+
+/*
 void Poller::updateEvent()
 {
-	/* When Poller is fetching event from PollIOs,
-	 * all PollIOs are forbidden to update their
-	 * events. */
+	// When Poller is fetching event from PollIOs,
+	// all PollIOs are forbidden to update their
+	// events. 
 	thread::MutexLocker locker(&m_eventLock);
 
 	for (IOMap::iterator it = m_ioMap.begin(), ie = m_ioMap.end(); it != ie; ++ it)
@@ -175,14 +234,15 @@ void Poller::updateEvent()
 			m_fdSet.push_back(i);
 	}
 }
+*/
 
 void Poller::triggerEvent(int fd)
 {
 	PollIO *pollIO = m_ioMap[fd];
 	assert(pollIO != NULL);
-	if (FD_ISSET(fd, &m_readSet))
+	if (FD_ISSET(fd, &m_pollReadSet))
 		pollIO->pollIn();
-	if (FD_ISSET(fd, &m_writeSet))
+	if (FD_ISSET(fd, &m_pollWriteSet))
 		pollIO->pollOut();
 	pollIO->detectCloseEvent();
 }

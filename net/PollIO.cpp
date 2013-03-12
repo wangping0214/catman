@@ -14,7 +14,7 @@ namespace net
 
 log4cxx::LoggerPtr PollIO::logger(log4cxx::Logger::getLogger("catman/net/PollIO"));
 
-PollIO::PollIO(int fd) : m_fd(fd), m_event(0), m_cachedEvent(0), m_eventDirty(false)
+PollIO::PollIO(int fd, int initEvent) : m_fd(fd), m_event(0), m_cachedEvent(initEvent), m_eventDirty(true)
 {
 	fcntl(m_fd, F_SETFL, fcntl(m_fd, F_GETFL) | O_NONBLOCK);
 }
@@ -83,7 +83,7 @@ void PollIO::forbidSend()
 void PollIO::close()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
-	m_event |= POLLCLOSE;
+	m_cachedEvent |= POLLCLOSE;
 	if (!m_eventDirty)
 		Poller::instance().onPollIOEventChanged(this);
 }
@@ -98,6 +98,8 @@ int PollIO::event() const
 	return m_event;
 }
 
+/* The synchronize operation forces PollIO and Poller
+ * share the same event lock. */
 void PollIO::synchronizeEvent()
 {
 	m_event = m_cachedEvent;

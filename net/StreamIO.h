@@ -16,7 +16,7 @@ namespace net
 class StreamIO : public SessionIO
 {
 public:
-	StreamIO(int fd, Session *session);
+	StreamIO(int fd, int initEvent, Session *session);
 	~StreamIO();
 	virtual void pollIn();
 	virtual void pollOut();

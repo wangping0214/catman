@@ -19,7 +19,7 @@ class Acceptor : public PollIO
 public:
 	static Acceptor* open(const Session &session);
 private:
-	Acceptor(int fd, const Session &session);
+	Acceptor(int fd, int initEvent, const Session &session);
 	~Acceptor();
 	virtual void pollIn();
 	virtual void pollOut();

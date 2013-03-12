@@ -35,14 +35,13 @@ Connector* Connector::open(const Session &session)
 	setsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, &val, sizeof(val));
 	val = atoi(conf.attributeValue("Client", "recvbufsize").c_str());
 	setsockopt(sockfd, SOL_SOCKET, SO_RCVBUF, &val, sizeof(val));
-	return (Connector*)Poller::instance().registerPollIO(new Connector(sockfd, *((sockaddr*)(&addr)), session));
+	return (Connector*)Poller::instance().registerPollIO(new Connector(sockfd, POLLIN | POLLOUT, *((sockaddr*)(&addr)), session));
 }
 
-Connector::Connector(int fd, const struct sockaddr &addr, const Session &session) : PollIO(fd), m_session(session.clone())
+Connector::Connector(int fd, int initEvent, const struct sockaddr &addr, const Session &session) : PollIO(fd, initEvent), 
+	m_session(session.clone())
 {
 	connect(m_fd, &addr, sizeof(addr));	//TODO
-	m_event |= POLLIN;
-	m_event |= POLLOUT;
 }
 
 Connector::~Connector()
@@ -51,10 +50,7 @@ Connector::~Connector()
 	socklen_t optLen = sizeof(optVal);
 	int optRet = getsockopt(m_fd, SOL_SOCKET, SO_ERROR, &optVal, &optLen);
 	if (0 == optRet && 0 == optVal)
-	{
-		LOG4CXX_DEBUG(logger, "Connect successfully");
-		Poller::instance().registerPollIO(new StreamIO(dup(m_fd), m_session)); //TODO
-	}
+		Poller::instance().registerPollIO(new StreamIO(dup(m_fd), POLLIN, m_session)); //TODO
 	else
 		LOG4CXX_WARN(logger, "Failed to connect");
 }

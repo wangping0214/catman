@@ -21,7 +21,7 @@ class Connector : public PollIO
 public:
 	static Connector* open(const Session &session);
 private:
-	Connector(int fd, const struct sockaddr &addr, const Session &session);
+	Connector(int fd, int initEvent, const struct sockaddr &addr, const Session &session);
 	~Connector();
 	virtual void pollIn();
 	virtual void pollOut();
