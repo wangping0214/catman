@@ -6,12 +6,14 @@ namespace catman
 namespace thread
 {
 
-//Mutex::Mutex(RecursiveType type)
-Mutex::Mutex(const std::string &identity) : m_identity(identity)
+Mutex::Mutex(const std::string &identity, RecursiveType type) : m_identity(identity)
 {
 	pthread_mutexattr_t mutexAttr;
 	pthread_mutexattr_init(&mutexAttr);
-	pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
+	if (type == NonRecursive)
+		pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_NORMAL);
+	else
+		pthread_mutexattr_settype(&mutexAttr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&m_mutex, &mutexAttr);
 	pthread_mutexattr_destroy(&mutexAttr);
 }

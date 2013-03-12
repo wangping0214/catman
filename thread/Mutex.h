@@ -25,8 +25,7 @@ public:
 		Recursive,
 		NonRecursive
 	};
-//	Mutex(RecursiveType type = NonRecursive);
-	Mutex(const std::string &identity);
+	Mutex(const std::string &identity, RecursiveType type = NonRecursive);
 	~Mutex();
 	void lock();
 	bool tryLock();
