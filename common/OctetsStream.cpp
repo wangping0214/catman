@@ -73,7 +73,7 @@ const void* OctetsStream::end() const
 	return m_data.end();
 }
 
-void OctetsStream::insert(void *pos, const void *buff, size_t len)
+void OctetsStream::insert(void *pos, const void *buff, uint32_t len)
 {
 	m_data.insert(pos, buff, len);
 }
@@ -83,7 +83,7 @@ void OctetsStream::insert(void *pos, const void *beginPos, const void *endPos)
 	m_data.insert(pos, beginPos, endPos);
 }
 
-void OctetsStream::erase(size_t pos, size_t len)
+void OctetsStream::erase(uint32_t pos, uint32_t len)
 {
 	m_data.erase(pos, len);
 } 
@@ -111,42 +111,42 @@ OctetsStream& OctetsStream::operator << (bool b)
 	return pushT(b);
 }
 
-OctetsStream& OctetsStream::operator << (char c)
+OctetsStream& OctetsStream::operator << (int8_t c)
 {
 	return pushT(c);
 }
 
-OctetsStream& OctetsStream::operator << (unsigned char uc)
+OctetsStream& OctetsStream::operator << (uint8_t uc)
 {
 	return pushT(uc);
 }
 
-OctetsStream& OctetsStream::operator << (short s)
+OctetsStream& OctetsStream::operator << (int16_t s)
 {
 	return pushT(s);
 }
 
-OctetsStream& OctetsStream::operator << (unsigned short us)
+OctetsStream& OctetsStream::operator << (uint16_t us)
 {
 	return pushT(us);
 }
 
-OctetsStream& OctetsStream::operator << (int i)
+OctetsStream& OctetsStream::operator << (int32_t i)
 {
 	return pushT(i);
 }
 
-OctetsStream& OctetsStream::operator << (unsigned int ui)
+OctetsStream& OctetsStream::operator << (uint32_t ui)
 {
 	return pushT(ui);
 }
 
-OctetsStream& OctetsStream::operator << (long l)
+OctetsStream& OctetsStream::operator << (int64_t l)
 {
 	return pushT(l);
 }
 
-OctetsStream& OctetsStream::operator << (unsigned long ul)
+OctetsStream& OctetsStream::operator << (uint64_t ul)
 {
 	return pushT(ul);
 }
@@ -174,7 +174,7 @@ OctetsStream& OctetsStream::operator << (const Octets &octets)
 	return *this;
 }
 
-OctetsStream& OctetsStream::pushBytes(const char *buffer, size_t len)
+OctetsStream& OctetsStream::pushBytes(const char *buffer, uint32_t len)
 {
 	m_data.insert(m_data.end(), buffer, len);
 	return *this;
@@ -186,68 +186,68 @@ OctetsStream& OctetsStream::pushBytes(const char *buffer, size_t len)
 
 const OctetsStream& OctetsStream::operator >> (bool &b) const
 {
-	b = popUChar();
+	b = pop_uint8_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (char &c) const
+const OctetsStream& OctetsStream::operator >> (int8_t &c) const
 {
-	c = popUChar();
+	c = pop_uint8_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (unsigned char &uc) const 
+const OctetsStream& OctetsStream::operator >> (uint8_t &uc) const 
 {
-	uc = popUChar();
+	uc = pop_uint8_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (short &s) const
+const OctetsStream& OctetsStream::operator >> (int16_t &s) const
 {
-	s = popUShort();
+	s = pop_uint16_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (unsigned short &us) const
+const OctetsStream& OctetsStream::operator >> (uint16_t &us) const
 {
-	us = popUShort();
+	us = pop_uint16_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (int &i) const 
+const OctetsStream& OctetsStream::operator >> (int32_t &i) const 
 {
-	i = popUInt();
+	i = pop_uint32_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (unsigned int &ui) const
+const OctetsStream& OctetsStream::operator >> (uint32_t &ui) const
 {
-	ui = popUInt();
+	ui = pop_uint32_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (long &l) const
+const OctetsStream& OctetsStream::operator >> (int64_t &l) const
 {
-	l = popULong();
+	l = pop_uint64_t();
 	return *this;
 }
 
-const OctetsStream& OctetsStream::operator >> (unsigned long &ul) const
+const OctetsStream& OctetsStream::operator >> (uint64_t &ul) const
 {
-	ul = popULong();
+	ul = pop_uint64_t();
 	return *this;
 }
 
 const OctetsStream& OctetsStream::operator >> (float &f) const 
 {
-	unsigned int ui = popUInt();
+	uint32_t ui = pop_uint32_t();
 	f = *(float*)(&ui);
 	return *this;
 }
 
 const OctetsStream& OctetsStream::operator >> (double &d) const 
 {
-	unsigned long ul = popULong();
+	uint64_t ul = pop_uint64_t();
 	d = *(double*)(&ul);
 	return *this;
 }
@@ -259,7 +259,7 @@ const OctetsStream& OctetsStream::operator >> (Marshal &marshal) const
 
 const OctetsStream& OctetsStream::operator >> (Octets &octets) const
 {
-	size_t len;
+	uint32_t len;
 	operator >> (len);
 	if (len > m_data.size() - m_pos)
 		; // TODO exceptional
@@ -268,7 +268,7 @@ const OctetsStream& OctetsStream::operator >> (Octets &octets) const
 	return *this;
 }
 
-const OctetsStream& OctetsStream::popBytes(char *buff, size_t len) const
+const OctetsStream& OctetsStream::popBytes(char *buff, uint32_t len) const
 {
 	if (len > m_data.size() - m_pos)
 		; // TODO exceptional
@@ -279,28 +279,28 @@ const OctetsStream& OctetsStream::popBytes(char *buff, size_t len) const
 
 // >> operator overload end
 
-unsigned char OctetsStream::popUChar() const
+unsigned char OctetsStream::pop_uint8_t() const
 {
 	unsigned char c;
 	popT(c);
 	return c;
 }
 
-unsigned short OctetsStream::popUShort() const
+unsigned short OctetsStream::pop_uint16_t() const
 {
 	unsigned short s;
 	popT(s);
 	return s;
 }
 
-unsigned int OctetsStream::popUInt() const
+unsigned int OctetsStream::pop_uint32_t() const
 {
 	unsigned int i;
 	popT(i);
 	return i;
 }
 
-unsigned long OctetsStream::popULong() const
+unsigned long OctetsStream::pop_uint64_t() const
 {
 	unsigned long l;
 	popT(l);

@@ -50,31 +50,31 @@ public:
 	void* end();
 	const void* begin() const;
 	const void* end() const;
-	void insert(void *pos, const void *buff, size_t len);
+	void insert(void *pos, const void *buff, uint32_t len);
 	void insert(void *pos, const void *beginPos, const void *endPos);
-	void erase(size_t pos, size_t len);
+	void erase(uint32_t pos, uint32_t len);
 	void erase(void *beginPos, void *endPos);
 	void clear();
 	bool atEnd();
 
 	// << operator overload begin
 	OctetsStream& operator << (bool b);
-	OctetsStream& operator << (char c);
-	OctetsStream& operator << (unsigned char uc);
-	OctetsStream& operator << (short s);
-	OctetsStream& operator << (unsigned short us);
-	OctetsStream& operator << (int i);
-	OctetsStream& operator << (unsigned int ui);
-	OctetsStream& operator << (long l);
-	OctetsStream& operator << (unsigned long ul);
+	OctetsStream& operator << (int8_t c);
+	OctetsStream& operator << (uint8_t uc);
+	OctetsStream& operator << (int16_t s);
+	OctetsStream& operator << (uint16_t us);
+	OctetsStream& operator << (int32_t i);
+	OctetsStream& operator << (uint32_t ui);
+	OctetsStream& operator << (int64_t l);
+	OctetsStream& operator << (uint64_t ul);
 	OctetsStream& operator << (float f);
 	OctetsStream& operator << (double d);
 	OctetsStream& operator << (const Marshal &marshal);
 	OctetsStream& operator << (const Octets &octets);
-	OctetsStream& pushBytes(const char *buff, size_t len);
+	OctetsStream& pushBytes(const char *buff, uint32_t len);
 	template<typename T> OctetsStream& operator << (const std::basic_string<T> &str)
 	{
-		size_t byteSize = str.size() * sizeof(T);
+		uint32_t byteSize = str.size() * sizeof(T);
 		operator << (byteSize);
 		insert(m_data.end(), str.c_str(), byteSize);
 		return *this;
@@ -108,24 +108,25 @@ public:
 	// << operator overload end
 
 	const OctetsStream& operator >> (bool &b) const;
-	const OctetsStream& operator >> (char &c) const;
-	const OctetsStream& operator >> (unsigned char &uc) const;
-	const OctetsStream& operator >> (short &s) const;
-	const OctetsStream& operator >> (unsigned short &us) const;
-	const OctetsStream& operator >> (int &i) const;
-	const OctetsStream& operator >> (unsigned int &ui) const;
-	const OctetsStream& operator >> (long &l) const;
-	const OctetsStream& operator >> (unsigned long &ul) const;
+	const OctetsStream& operator >> (int8_t &c) const;
+	const OctetsStream& operator >> (uint8_t &uc) const;
+	const OctetsStream& operator >> (int16_t &s) const;
+	const OctetsStream& operator >> (uint16_t &us) const;
+	const OctetsStream& operator >> (int32_t &i) const;
+	const OctetsStream& operator >> (uint32_t &ui) const;
+	const OctetsStream& operator >> (int64_t &l) const;
+	const OctetsStream& operator >> (uint64_t &ul) const;
 	const OctetsStream& operator >> (float &f) const;
 	const OctetsStream& operator >> (double &d) const;
 	const OctetsStream& operator >> (Marshal &marshal) const;
 	const OctetsStream& operator >> (Octets &octets) const;
-	const OctetsStream& popBytes(char *buff, size_t len) const;	
+	const OctetsStream& popBytes(char *buff, uint32_t len) const;	
 	template<typename T> const OctetsStream& operator >> (std::basic_string<T> &str) const
 	{
-		size_t size;
+		uint32_t size;
 		operator >> (size);
-		str.assign((T*)((char*)m_data.begin() + m_pos), size / sizeof(T));
+		uint32_t ts = size / sizeof(T);
+		str.assign((T*)((char*)m_data.begin() + m_pos), ts);
 		m_pos += size;
 		return *this;
 	}
@@ -168,13 +169,13 @@ private:
 		val = *(T*)((char*)m_data.begin() + m_pos);
 		m_pos += sizeof(T);
 	}
-	unsigned char popUChar() const;
-	unsigned short popUShort() const;
-	unsigned int popUInt() const;
-	unsigned long popULong() const;
+	unsigned char pop_uint8_t() const;
+	unsigned short pop_uint16_t() const;
+	unsigned int pop_uint32_t() const;
+	unsigned long pop_uint64_t() const;
 private:
 	Octets m_data;
-	mutable size_t m_pos;	// For output
+	mutable uint32_t m_pos;	// For output
 };
 
 template<typename container> OctetsStream& STLContainer<container>::marshal(OctetsStream &stream) const
@@ -188,9 +189,9 @@ template<typename container> OctetsStream& STLContainer<container>::marshal(Octe
 template<typename container> const OctetsStream& STLContainer<container>::unmarshal(const OctetsStream &stream)
 {
 	m_containerPtr->clear();
-	size_t size;
+	uint32_t size;
 	stream >> size;
-	for (size_t i = 0; i < size; ++ size)
+	for (uint32_t i = 0; i < size; ++ size)
 	{
 		typename container::value_type tmp;
 		stream >> tmp;

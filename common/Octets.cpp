@@ -7,7 +7,7 @@ namespace catman
 namespace common
 {
 
-static void* fast_memmove(void *dest, const void *src, size_t n)
+static void* fast_memmove(void *dest, const void *src, uint32_t n)
 {
 	char *pdest = (char*)dest;
 	char *psrc = (char*)src;
@@ -25,17 +25,17 @@ Octets::Rep::Rep() : m_capacity(0), m_size(0), m_ref(0)
 {
 }
 
-size_t Octets::Rep::capacity() const
+uint32_t Octets::Rep::capacity() const
 {
 	return m_capacity;
 }
 
-size_t Octets::Rep::size() const
+uint32_t Octets::Rep::size() const
 {
 	return m_size;
 }
 
-void Octets::Rep::setSize(size_t newSize) 
+void Octets::Rep::setSize(uint32_t newSize) 
 {
 	m_size = newSize;
 }
@@ -75,7 +75,7 @@ void* Octets::Rep::unique()
 	return data();
 }
 
-void* Octets::Rep::reserve(size_t size)
+void* Octets::Rep::reserve(uint32_t size)
 {
 	size = alignSize(size);
 	if (size > m_capacity)
@@ -88,7 +88,7 @@ void* Octets::Rep::reserve(size_t size)
 	return unique();
 }
 
-Octets::Rep* Octets::Rep::create(size_t capacity)
+Octets::Rep* Octets::Rep::create(uint32_t capacity)
 {
 	Rep *rep = new (capacity) Rep;
 	rep->m_capacity = capacity;
@@ -105,15 +105,15 @@ Octets::Rep* Octets::Rep::clone()
 	return rep;
 }
 
-size_t Octets::Rep::alignSize(size_t size)
+uint32_t Octets::Rep::alignSize(uint32_t size)
 {
-	size_t tmp = 16;
+	uint32_t tmp = 16;
 	while (size > tmp)
 		tmp <<= 1;
 	return tmp;
 }
 
-void* Octets::Rep::operator new(size_t size, size_t extra)
+void* Octets::Rep::operator new(size_t size, uint32_t extra)
 {
 	return malloc(size + extra);
 }
@@ -130,11 +130,11 @@ Octets::Octets() : m_base(Rep::null.data())
 	rep()->incRef();
 }
 
-Octets::Octets(size_t size) : m_base(Rep::create(size)->data())
+Octets::Octets(uint32_t size) : m_base(Rep::create(size)->data())
 {
 }
 
-Octets::Octets(const void *buffer, size_t len) : m_base(Rep::create(len)->data())
+Octets::Octets(const void *buffer, uint32_t len) : m_base(Rep::create(len)->data())
 {
 	memcpy(m_base, buffer, len);
 	rep()->setSize(len);
@@ -142,7 +142,7 @@ Octets::Octets(const void *buffer, size_t len) : m_base(Rep::create(len)->data()
 
 Octets::Octets(const void *beginPos, const void *endPos) : m_base(Rep::create((char*)endPos - (char*)beginPos)->data())
 {
-	size_t len = (char*)endPos - (char*)beginPos;
+	uint32_t len = (char*)endPos - (char*)beginPos;
 	memcpy(m_base, beginPos, len);
 	rep()->setSize(len);
 }
@@ -210,12 +210,12 @@ const void* Octets::end() const
 	return (char*)m_base + size();
 }
 
-size_t Octets::size() const
+uint32_t Octets::size() const
 {
 	return rep()->size();
 }
 
-size_t Octets::capacity() const
+uint32_t Octets::capacity() const
 {
 	return rep()->capacity();
 }
@@ -227,7 +227,7 @@ Octets& Octets::clear()
 	return *this;
 }
 
-Octets& Octets::erase(size_t pos, size_t len)
+Octets& Octets::erase(uint32_t pos, uint32_t len)
 {
 	void *beginPos = (char*)begin() + pos;
 	void *endPos = (char*)beginPos + len;
@@ -247,18 +247,18 @@ Octets& Octets::erase(void *beginPos, void *endPos)
 			endPos = (char*)beginPos + diff;
 		}
 		fast_memmove(beginPos, endPos, ((char*)endPos + size()) - (char*)m_base);
-		size_t newSize = rep()->size() - ((char*)endPos - (char*)beginPos);
+		uint32_t newSize = rep()->size() - ((char*)endPos - (char*)beginPos);
 		rep()->setSize(newSize);
 	}
 	return *this;
 }
 
-Octets& Octets::insert(void *pos, const void *buff, size_t len)
+Octets& Octets::insert(void *pos, const void *buff, uint32_t len)
 {
 	ptrdiff_t offset = (char*)pos - (char*)m_base;
 	reserve(size() + len);
 	pos = (char*)m_base + offset;
-	size_t adjust = size() - offset;
+	uint32_t adjust = size() - offset;
 	if (adjust)
 		fast_memmove((char*)pos + len, pos, len);
 	fast_memmove(pos, buff, len);
@@ -271,20 +271,20 @@ Octets& Octets::insert(void *pos, const void *beginPos, const void *endPos)
 	return insert(pos, beginPos, (char*)endPos - (char*)beginPos);
 }
 
-Octets& Octets::reserve(size_t size)
+Octets& Octets::reserve(uint32_t size)
 {
 	m_base = rep()->reserve(size);
 	return *this;
 }
 
-Octets& Octets::resize(size_t size)
+Octets& Octets::resize(uint32_t size)
 {
 	reserve(size);
 	rep()->setSize(size);
 	return *this;
 }
 
-Octets& Octets::replace(const void *buff, size_t len)
+Octets& Octets::replace(const void *buff, uint32_t len)
 {
 	reserve(len);
 	memcpy(m_base, buff, len);
