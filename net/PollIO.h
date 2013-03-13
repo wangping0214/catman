@@ -40,6 +40,7 @@ protected:
 	PollIO(int fd, int initEvent);
 protected:
 	int m_fd;
+private:
 	int m_event;
 	int m_cachedEvent;
 	bool m_eventDirty;

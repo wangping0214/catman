@@ -62,9 +62,11 @@ Protocol* Protocol::decode(OctetsStream &stream)
 		return false;
 	Protocol *protocol = NULL;
 	uint32_t type = 0;
+	stream >> OctetsStream::TransactionBegin;
 	stream >> type;
 	if ((protocol = create(type)) != NULL)
 		stream >> *protocol;
+	stream >> OctetsStream::TransactionCommit;
 	// else consider exceptional occasion
 	return protocol;
 }

@@ -37,6 +37,8 @@ Session* Session::clone() const
 	return new Session(*this);
 }
 
+// TODO must be locked by outlock, because Poll thread and other
+// will change out buffer simultaneously.
 bool Session::send(common::Octets buff)
 {
 	m_outBuffer.insert(m_outBuffer.begin(), buff.begin(), buff.end());
@@ -56,7 +58,8 @@ bool Session::send(const common::Protocol *protocol)
 
 void Session::onRecv()
 {
-	common::OctetsStream stream(m_inBuffer);
+	common::OctetsStream stream(m_inBuffer); 	// copy
+	m_inBuffer.clear(); 						// clear
 	for (common::Protocol *p; (p = common::Protocol::decode(stream)) != NULL; )
 	{
 		common::ProcessTask *task = new common::ProcessTask(p, m_manager, m_id);

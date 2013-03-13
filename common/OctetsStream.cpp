@@ -184,6 +184,23 @@ OctetsStream& OctetsStream::pushBytes(const char *buffer, uint32_t len)
 
 // >> operator overload begin 
 
+OctetsStream& OctetsStream::operator >> (UnmarshalTransaction transaction)
+{
+	switch (transaction)
+	{
+	case TransactionBegin:
+		m_tranPos = m_pos;
+		break;
+	case TransactionRollback:
+		m_pos = m_tranPos;
+		break;
+	case TransactionCommit:
+		erase(0, m_pos);
+		m_pos = 0;
+	}
+	return *this;
+}
+
 const OctetsStream& OctetsStream::operator >> (bool &b) const
 {
 	b = pop_uint8_t();

@@ -53,7 +53,7 @@ private:
 private:
 	PollIO *m_pollIO;
 	common::Octets m_inBuffer;	// for PollIO
-	common::Octets m_outBuffer; // for PollIO
+	common::Octets m_outBuffer; // for PollIO will be write by multi-threads simultaneously
 	thread::Mutex m_outLock;	// for send
 	SessionManager *m_manager;	// which manager belongs to
 	uint32_t m_id;				// id
