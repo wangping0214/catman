@@ -84,7 +84,7 @@ Poller& Poller::instance()
 PollIO* Poller::registerPollIO(PollIO *pollIO)
 {
 	thread::MutexLocker locker(&m_eventLock);
-	m_ioMap[pollIO->fileDescriptor()] = pollIO;
+	m_cachedIOMap[pollIO->fileDescriptor()] = pollIO;
 	onPollIOEventChanged(pollIO);
 	return pollIO;
 }
@@ -137,6 +137,10 @@ void Poller::synchronizeEvent()
 	IOSet tmpIOSet;
 	{
 		thread::MutexLocker locker(&m_eventLock);
+		// synchronize newly added PollIO
+		m_ioMap.insert(m_cachedIOMap.begin(), m_cachedIOMap.end());
+		m_cachedIOMap.clear();
+		// synchronize events of dirty PollIOs
 		for (IOSet::iterator it = m_dirtyIOSet.begin(), ie = m_dirtyIOSet.end(); it != ie; ++ it)
 		{	
 			(*it)->synchronizeEvent();

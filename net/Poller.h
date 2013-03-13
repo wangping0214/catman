@@ -61,6 +61,7 @@ private:
 	fd_set m_pollReadSet, m_pollWriteSet;
 	int m_maxfd;
 	IOMap m_ioMap;
+	IOMap m_cachedIOMap;
 	IOSet m_dirtyIOSet;
 	bool m_canWakeup;
 	thread::Mutex m_eventLock;

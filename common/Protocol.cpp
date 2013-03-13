@@ -11,7 +11,7 @@ log4cxx::LoggerPtr Protocol::logger(log4cxx::Logger::getLogger("catman/common/Pr
 
 Protocol::TypeProtocolMap Protocol::protocolStubs;
 
-Protocol::Protocol(size_t type) : m_type(type)
+Protocol::Protocol(uint32_t type) : m_type(type)
 {
 	if (getStub(type) == NULL)
 		protocolStubs.insert(std::make_pair(m_type, this));
@@ -30,7 +30,7 @@ void Protocol::destroy()
 	delete this;
 }
 
-size_t Protocol::type() const
+uint32_t Protocol::type() const
 {
 	return m_type;
 }
@@ -61,7 +61,7 @@ Protocol* Protocol::decode(OctetsStream &stream)
 	if (stream.atEnd())
 		return false;
 	Protocol *protocol = NULL;
-	size_t type = 0;
+	uint32_t type = 0;
 	stream >> type;
 	if ((protocol = create(type)) != NULL)
 		stream >> *protocol;
@@ -69,13 +69,13 @@ Protocol* Protocol::decode(OctetsStream &stream)
 	return protocol;
 }
 
-const Protocol* Protocol::getStub(size_t type)
+const Protocol* Protocol::getStub(uint32_t type)
 {
 	TypeProtocolMap::const_iterator it = protocolStubs.find(type);
 	return it != protocolStubs.end() ? it->second : NULL;
 }
 
-Protocol* Protocol::create(size_t type)
+Protocol* Protocol::create(uint32_t type)
 {
 	const Protocol* stub = getStub(type);
 	return stub != NULL ? stub->clone() : NULL;

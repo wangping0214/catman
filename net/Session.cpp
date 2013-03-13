@@ -13,7 +13,7 @@ namespace net
 
 log4cxx::LoggerPtr Session::logger(log4cxx::Logger::getLogger("catman/net/Session"));
 
-size_t Session::s_idSeed = 0;
+uint32_t Session::s_idSeed = 0;
 thread::Mutex Session::s_seedLock("Session_seedLock");
 
 Session::Session(SessionManager *manager) : m_pollIO(NULL), m_outLock("Session_outLock"), m_manager(manager), m_id(nextId()), m_closing(false) 
@@ -122,7 +122,7 @@ thread::Mutex& Session::outLock()
 	return m_outLock;
 }
 
-size_t Session::nextId()
+uint32_t Session::nextId()
 {
 	thread::MutexLocker locker(&s_seedLock);
 	return ++ s_idSeed;

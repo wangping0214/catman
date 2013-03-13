@@ -10,6 +10,7 @@
 #include <log4cxx/logger.h>
 #include <map>
 #include <cstddef>
+#include <cstdint>
 
 namespace catman
 {
@@ -27,24 +28,24 @@ class OctetsStream;
 
 class Protocol : public Marshal
 {
-	typedef std::map<size_t, Protocol*> TypeProtocolMap;
+	typedef std::map<uint32_t, Protocol*> TypeProtocolMap;
 public:
-	virtual void process(net::SessionManager *manager, size_t sessionId) = 0;
+	virtual void process(net::SessionManager *manager, uint32_t sessionId) = 0;
 	virtual Protocol* clone() const = 0;
 	virtual void destroy();
-	size_t type() const;
+	uint32_t type() const;
 	void encode(OctetsStream &stream) const;
 	Octets encode() const;
 	Octets encode();
 	static Protocol *decode(OctetsStream &stream);
-	static const Protocol* getStub(size_t type);
-	static Protocol* create(size_t type);
+	static const Protocol* getStub(uint32_t type);
+	static Protocol* create(uint32_t type);
 protected:
-	Protocol(size_t type);
+	Protocol(uint32_t type);
 	Protocol(const Protocol &other);
 	virtual ~Protocol();
 protected:
-	size_t m_type;
+	uint32_t m_type;
 private:
 	static TypeProtocolMap protocolStubs;
 

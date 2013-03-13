@@ -11,6 +11,7 @@
 #include <log4cxx/logger.h>
 #include <deque>
 #include <vector>
+#include <cstdint>
 
 namespace catman
 {
@@ -37,14 +38,14 @@ public:
 	virtual ~ThreadPool();
 	virtual void start();
 	virtual void execute(Runnable *runnable);
-	size_t maximumPoolSize() const;
+	uint32_t maximumPoolSize() const;
 private:
-	explicit ThreadPool(size_t maximumPoolSize);
+	explicit ThreadPool(uint32_t maximumPoolSize);
 	Runnable *fetchRunnable();
 private:
 	RunnableQueue m_runnableQueue;
 	ThreadVector m_activeThreads;
-	size_t m_maximumPoolSize;
+	uint32_t m_maximumPoolSize;
 	
 	Mutex m_queueLock;
 	Condition m_queueCondition;

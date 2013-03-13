@@ -18,7 +18,7 @@ SessionManager::~SessionManager()
 {
 }
 
-bool SessionManager::send(size_t sessionId, common::Octets data)
+bool SessionManager::send(uint32_t sessionId, common::Octets data)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
 	Session *s = session(sessionId);
@@ -27,7 +27,7 @@ bool SessionManager::send(size_t sessionId, common::Octets data)
 	return false;
 }
 
-bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
+bool SessionManager::send(uint32_t sessionId, common::Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
 	Session *s = session(sessionId);
@@ -38,7 +38,7 @@ bool SessionManager::send(size_t sessionId, common::Protocol *protocol)
 	return false;
 }
 
-bool SessionManager::send(size_t sessionId, const common::Protocol *protocol)
+bool SessionManager::send(uint32_t sessionId, const common::Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
 	Session *s = session(sessionId);
@@ -47,17 +47,17 @@ bool SessionManager::send(size_t sessionId, const common::Protocol *protocol)
 	return false;
 }
 
-bool SessionManager::send(size_t sessionId, common::Protocol &protocol)
+bool SessionManager::send(uint32_t sessionId, common::Protocol &protocol)
 {
 	return send(sessionId, &protocol);
 }
 
-bool SessionManager::send(size_t sessionId, const common::Protocol &protocol)
+bool SessionManager::send(uint32_t sessionId, const common::Protocol &protocol)
 {
 	return send(sessionId, &protocol);
 }
 
-void SessionManager::addSession(size_t sessionId, Session *session)
+void SessionManager::addSession(uint32_t sessionId, Session *session)
 {
 	{
 		thread::WriteLocker locker(&m_mapRWLock);
@@ -66,7 +66,7 @@ void SessionManager::addSession(size_t sessionId, Session *session)
 	onAddSession(sessionId);
 }
 
-void SessionManager::deleteSession(size_t sessionId)
+void SessionManager::deleteSession(uint32_t sessionId)
 {
 	onDeleteSession(sessionId);
 	{
@@ -75,12 +75,12 @@ void SessionManager::deleteSession(size_t sessionId)
 	}
 }
 
-void SessionManager::abortSession(size_t sessionId)
+void SessionManager::abortSession(uint32_t sessionId)
 {
 	onAbortSession(sessionId);
 }
 
-Session* SessionManager::session(size_t sessionId)
+Session* SessionManager::session(uint32_t sessionId)
 {
 	IdSessionMap::iterator it = m_idSessionMap.find(sessionId);
 	return it != m_idSessionMap.end() ? it->second : NULL;

@@ -39,7 +39,7 @@ ThreadPool& ThreadPool::instance()
 	return pool;
 }
 
-ThreadPool::ThreadPool(size_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize), m_queueLock("ThreadPool_queueLock")
+ThreadPool::ThreadPool(uint32_t maximumPoolSize) : m_maximumPoolSize(maximumPoolSize), m_queueLock("ThreadPool_queueLock")
 {
 }
 
@@ -57,7 +57,7 @@ ThreadPool::~ThreadPool()
 
 void ThreadPool::start()
 {
-	for (size_t i = 0; i < m_maximumPoolSize; ++ i)
+	for (uint32_t i = 0; i < m_maximumPoolSize; ++ i)
 	{
 		ThreadPoolThread *thread = new ThreadPoolThread(this);
 		m_activeThreads.push_back(thread);
@@ -77,7 +77,7 @@ void ThreadPool::execute(Runnable *runnable)
 	m_queueLock.unlock();
 }
 
-size_t ThreadPool::maximumPoolSize() const
+uint32_t ThreadPool::maximumPoolSize() const
 {
 	return m_maximumPoolSize;
 }

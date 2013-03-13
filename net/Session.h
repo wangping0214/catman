@@ -8,6 +8,7 @@
 #include <catman/common/Octets.h>
 #include <catman/thread/Mutex.h>
 #include <log4cxx/logger.h>
+#include <cstdint>
 
 namespace catman
 {
@@ -48,17 +49,17 @@ private:
 	common::Octets& inBuffer();
 	common::Octets& outBuffer();
 	thread::Mutex& outLock();
-	static size_t nextId();
+	static uint32_t nextId();
 private:
 	PollIO *m_pollIO;
 	common::Octets m_inBuffer;	// for PollIO
 	common::Octets m_outBuffer; // for PollIO
 	thread::Mutex m_outLock;	// for send
 	SessionManager *m_manager;	// which manager belongs to
-	size_t m_id;				// id
+	uint32_t m_id;				// id
 	bool m_closing;
 	
-	static size_t s_idSeed;
+	static uint32_t s_idSeed;
 	static thread::Mutex s_seedLock;
 
 	static log4cxx::LoggerPtr logger;

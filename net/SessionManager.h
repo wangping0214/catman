@@ -9,6 +9,7 @@
 #include <catman/thread/ReadWriteLock.h>
 #include <log4cxx/logger.h>
 #include <map>
+#include <cstdint>
  
 namespace catman
 {
@@ -26,23 +27,23 @@ class Session;
 class SessionManager
 {
 	friend class Session;
-	typedef std::map<size_t, Session*> IdSessionMap;
+	typedef std::map<uint32_t, Session*> IdSessionMap;
 public:
 	SessionManager();
 	~SessionManager();
-	virtual void onAddSession(size_t sessionId) = 0;	// post event
-	virtual void onDeleteSession(size_t sessionId) = 0; // pre event
-	virtual void onAbortSession(size_t sessionId) = 0;
-	bool send(size_t sessionId, common::Octets data);
-	bool send(size_t sessionId, common::Protocol *protocol);
-	bool send(size_t sessionId, const common::Protocol *protocol);
-	bool send(size_t sessionId, common::Protocol &protocol);
-	bool send(size_t sessionId, const common::Protocol &protocol);
+	virtual void onAddSession(uint32_t sessionId) = 0;	// post event
+	virtual void onDeleteSession(uint32_t sessionId) = 0; // pre event
+	virtual void onAbortSession(uint32_t sessionId) = 0;
+	bool send(uint32_t sessionId, common::Octets data);
+	bool send(uint32_t sessionId, common::Protocol *protocol);
+	bool send(uint32_t sessionId, const common::Protocol *protocol);
+	bool send(uint32_t sessionId, common::Protocol &protocol);
+	bool send(uint32_t sessionId, const common::Protocol &protocol);
 private:
-	void addSession(size_t sessionId, Session *session);
-	void deleteSession(size_t sid);
-	void abortSession(size_t sid);
-	Session* session(size_t sessionId);					// no lock
+	void addSession(uint32_t sessionId, Session *session);
+	void deleteSession(uint32_t sid);
+	void abortSession(uint32_t sid);
+	Session* session(uint32_t sessionId);					// no lock
 private:
 	IdSessionMap m_idSessionMap;
 	thread::ReadWriteLock m_mapRWLock;
