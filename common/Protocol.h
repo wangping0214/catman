@@ -10,7 +10,7 @@
 #include <log4cxx/logger.h>
 #include <map>
 #include <cstddef>
-#include <cstdint>
+#include <stdint.h>
 
 namespace catman
 {

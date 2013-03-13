@@ -8,7 +8,7 @@
 #include <catman/common/Octets.h>
 #include <catman/thread/Mutex.h>
 #include <log4cxx/logger.h>
-#include <cstdint>
+#include <stdint.h>
 
 namespace catman
 {

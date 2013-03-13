@@ -22,7 +22,7 @@ LoginResponse g_LoginResponse;
 class Client : public catman::net::SessionManager
 {
 public:
-	virtual void onAddSession(size_t sessionId)
+	virtual void onAddSession(uint32_t sessionId)
 	{
 		catman::common::LogDebug(g_logger, "OnAddSession: %lu", sessionId);
 		PlayerLogin login;
@@ -35,11 +35,11 @@ public:
 		else
 			catman::common::LogDebug(g_logger, "send unsuccessfully");
 	}
-	virtual void onDeleteSession(size_t sessionId)
+	virtual void onDeleteSession(uint32_t sessionId)
 	{
 		std::cout << "OnDelSession: " << sessionId << endl;
 	}
-	virtual void onAbortSession(size_t sessionId)
+	virtual void onAbortSession(uint32_t sessionId)
 	{
 		std::cout << "OnAbortSession: " << sessionId << endl;
 	}

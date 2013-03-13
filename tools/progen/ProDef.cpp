@@ -60,7 +60,7 @@ void ProDef::writeSteady(FILE *destFile, int tabCount)
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include \"%s\"\n", TabString::get(tabCount + 1), m_name.c_str());
 	fprintf(destFile, "\n");
-	fprintf(destFile, "%svoid process(catman::net::SessionManager *manager, size_t sessionId)\n", TabString::get(tabCount + 1));
+	fprintf(destFile, "%svoid process(catman::net::SessionManager *manager, uint32_t sessionId)\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s{\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s};\n", TabString::get(tabCount));

@@ -9,7 +9,7 @@
 #include <catman/thread/ReadWriteLock.h>
 #include <log4cxx/logger.h>
 #include <map>
-#include <cstdint>
+#include <stdint.h>
  
 namespace catman
 {

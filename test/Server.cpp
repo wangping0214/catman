@@ -25,15 +25,15 @@ LoginResponse g_LoginResponse;
 class Server : public catman::net::SessionManager
 {
 public:
-	virtual void onAddSession(size_t sessionId)
+	virtual void onAddSession(uint32_t sessionId)
 	{
 		catman::common::LogDebug(g_logger, "OnAddSession: %lu", sessionId);
 	}
-	virtual void onDeleteSession(size_t sessionId)
+	virtual void onDeleteSession(uint32_t sessionId)
 	{
 		catman::common::LogDebug(g_logger, "OnDelSession: %lu", sessionId);
 	}
-	virtual void onAbortSession(size_t sessionId)
+	virtual void onAbortSession(uint32_t sessionId)
 	{
 		catman::common::LogDebug(g_logger, "OnAbortSession: %lu", sessionId);
 	}

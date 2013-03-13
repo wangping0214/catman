@@ -11,7 +11,7 @@
 #include <log4cxx/logger.h>
 #include <deque>
 #include <vector>
-#include <cstdint>
+#include <stdint.h>
 
 namespace catman
 {
