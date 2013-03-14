@@ -41,6 +41,7 @@ Session* Session::clone() const
 // will change out buffer simultaneously.
 bool Session::send(common::Octets buff)
 {
+	thread::MutexLocker locker(&m_outLock);
 	m_outBuffer.insert(m_outBuffer.begin(), buff.begin(), buff.end());
 	m_pollIO->permitSend();
 	return true;
