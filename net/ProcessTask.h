@@ -10,7 +10,7 @@
 
 namespace catman
 {
-namespace common
+namespace net 
 {
 
 class Protocol;

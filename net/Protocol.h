@@ -15,29 +15,28 @@
 namespace catman
 {
 
-/* net namespace forward declaration */
-namespace net
-{
-class SessionManager;
-}
-
 namespace common
 {
-
 class OctetsStream;
+}
 
-class Protocol : public Marshal
+namespace net
+{
+
+class SessionManager;
+
+class Protocol : public common::Marshal
 {
 	typedef std::map<uint32_t, Protocol*> TypeProtocolMap;
 public:
-	virtual void process(net::SessionManager *manager, uint32_t sessionId) = 0;
+	virtual void process(SessionManager *manager, uint32_t sessionId) = 0;
 	virtual Protocol* clone() const = 0;
 	virtual void destroy();
 	uint32_t type() const;
-	void encode(OctetsStream &stream) const;
-	Octets encode() const;
-	Octets encode();
-	static Protocol *decode(OctetsStream &stream);
+	void encode(common::OctetsStream &stream) const;
+	common::Octets encode() const;
+	common::Octets encode();
+	static Protocol *decode(common::OctetsStream &stream);
 	static const Protocol* getStub(uint32_t type);
 	static Protocol* create(uint32_t type);
 protected:

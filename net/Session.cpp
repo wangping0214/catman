@@ -1,8 +1,8 @@
 #include <catman/net/Session.h>
 #include <catman/net/PollIO.h>
+#include <catman/net/Protocol.h>
+#include <catman/net/ProcessTask.h>
 #include <catman/common/OctetsStream.h>
-#include <catman/common/Protocol.h>
-#include <catman/common/ProcessTask.h>
 #include <catman/common/LogUtil.h>
 #include <catman/thread/ThreadPool.h>
 
@@ -47,12 +47,12 @@ bool Session::send(common::Octets buff)
 	return true;
 }
 
-bool Session::send(common::Protocol *protocol)
+bool Session::send(Protocol *protocol)
 {
 	return send(protocol->encode());
 }
 
-bool Session::send(const common::Protocol *protocol)
+bool Session::send(const Protocol *protocol)
 {
 	return send(protocol->encode());
 }
@@ -61,9 +61,9 @@ void Session::onRecv()
 {
 	common::OctetsStream stream(m_inBuffer); 	// copy
 	m_inBuffer.clear(); 						// clear
-	for (common::Protocol *p; (p = common::Protocol::decode(stream)) != NULL; )
+	for (Protocol *p; (p = Protocol::decode(stream)) != NULL; )
 	{
-		common::ProcessTask *task = new common::ProcessTask(p, m_manager, m_id);
+		ProcessTask *task = new ProcessTask(p, m_manager, m_id);
 		thread::ThreadPool::instance().execute(task);
 	}
 }

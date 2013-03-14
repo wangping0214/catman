@@ -14,14 +14,10 @@
 namespace catman
 {
 
-namespace common
-{
-class Protocol;
-}
-
 namespace net
 {
 
+class Protocol;
 class Session;
 
 class SessionManager
@@ -35,10 +31,10 @@ public:
 	virtual void onDeleteSession(uint32_t sessionId) = 0; // pre event
 	virtual void onAbortSession(uint32_t sessionId) = 0;
 	bool send(uint32_t sessionId, common::Octets data);
-	bool send(uint32_t sessionId, common::Protocol *protocol);
-	bool send(uint32_t sessionId, const common::Protocol *protocol);
-	bool send(uint32_t sessionId, common::Protocol &protocol);
-	bool send(uint32_t sessionId, const common::Protocol &protocol);
+	bool send(uint32_t sessionId, Protocol *protocol);
+	bool send(uint32_t sessionId, const Protocol *protocol);
+	bool send(uint32_t sessionId, Protocol &protocol);
+	bool send(uint32_t sessionId, const Protocol &protocol);
 private:
 	void addSession(uint32_t sessionId, Session *session);
 	void deleteSession(uint32_t sid);

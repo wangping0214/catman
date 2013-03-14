@@ -1,10 +1,10 @@
-#include <catman/common/Protocol.h>
+#include <catman/net/Protocol.h>
 #include <catman/common/OctetsStream.h>
 #include <catman/common/LogUtil.h>
 
 namespace catman
 {
-namespace common
+namespace net
 {
 
 log4cxx::LoggerPtr Protocol::logger(log4cxx::Logger::getLogger("catman/common/Protocol"));
@@ -35,38 +35,38 @@ uint32_t Protocol::type() const
 	return m_type;
 }
 
-void Protocol::encode(OctetsStream &stream) const
+void Protocol::encode(common::OctetsStream &stream) const
 {
 //	OctetsStream data;
 //	data << *this;
 	stream << m_type << *this;
 }
 
-Octets Protocol::encode() const
+common::Octets Protocol::encode() const
 {
-	OctetsStream stream;
+	common::OctetsStream stream;
 	encode(stream);
-	return (Octets)stream;
+	return (common::Octets)stream;
 }
 
-Octets Protocol::encode() 
+common::Octets Protocol::encode() 
 {
-	OctetsStream stream;
+	common::OctetsStream stream;
 	encode(stream);
-	return (Octets)stream;
+	return (common::Octets)stream;
 }
 
-Protocol* Protocol::decode(OctetsStream &stream)
+Protocol* Protocol::decode(common::OctetsStream &stream)
 {
 	if (stream.atEnd())
 		return false;
 	Protocol *protocol = NULL;
 	uint32_t type = 0;
-	stream >> OctetsStream::TransactionBegin;
+	stream >> common::OctetsStream::TransactionBegin;
 	stream >> type;
 	if ((protocol = create(type)) != NULL)
 		stream >> *protocol;
-	stream >> OctetsStream::TransactionCommit;
+	stream >> common::OctetsStream::TransactionCommit;
 	// else consider exceptional occasion
 	return protocol;
 }

@@ -13,14 +13,10 @@
 namespace catman
 {
 
-namespace common
-{
-class Protocol;
-}
-
 namespace net
 {
 
+class Protocol;
 class PollIO;
 class SessionIO;
 class StreamIO;
@@ -36,8 +32,8 @@ public:
 	~Session();
 	Session* clone() const;
 	bool send(common::Octets buff);	// application layer	->	session layer
-	bool send(common::Protocol *protocol);	// application layer 	-> 	session layer
-	bool send(const common::Protocol *protocol);
+	bool send(Protocol *protocol);	// application layer 	-> 	session layer
+	bool send(const Protocol *protocol);
 	virtual void onRecv();			// transport layer 		->	session layer
 	virtual void onOpen();			// transport layer		->	session layer
 	virtual void onClose();

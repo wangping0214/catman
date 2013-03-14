@@ -5,7 +5,8 @@
  * Keep it simple at first 
  *************************************************************/
 
-#include <catman/common/Protocol.h>
+#include <catman/net/Protocol.h>
+#include <catman/thread/Mutex.h>
 #include <stdint.h>
 
 namespace catman
@@ -28,8 +29,8 @@ protected:
 		bool isRequest();
 		void clearRequest();
 		void setRequest();
-		common::OctetsStream &marshal(OctetsStream &stream) const;
-		const common::OctetsStream &unmarshal(const OctetsStream &stream);
+		common::OctetsStream &marshal(common::OctetsStream &stream) const;
+		const common::OctetsStream &unmarshal(const common::OctetsStream &stream);
 	private:
 		union
 		{
@@ -54,7 +55,7 @@ public:
 class Rpc
 {
 public:
-	Rpc(uint32_t type, 
+	Rpc(uint32_t type); 
 private:
 };
 

@@ -53,10 +53,10 @@ void ProDef::writeSteady(FILE *destFile, int tabCount)
 	fprintf(destFile, "%s#ifndef %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "%s#define %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "\n");
-	fprintf(destFile, "%s#include <catman/common/Protocol.h>\n", TabString::get(tabCount));
+	fprintf(destFile, "%s#include <catman/net/Protocol.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include <catman/common/OctetsStream.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
-	fprintf(destFile, "%sclass %s : public catman::common::Protocol\n", TabString::get(tabCount), m_name.c_str());
+	fprintf(destFile, "%sclass %s : public catman::net::Protocol\n", TabString::get(tabCount), m_name.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include \"%s\"\n", TabString::get(tabCount + 1), m_name.c_str());
 	fprintf(destFile, "\n");
@@ -79,18 +79,18 @@ void ProDef::writeMethods(FILE *destFile, int tabCount)
 {
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
 	// default constructor
-	fprintf(destFile, "%s%s() : catman::common::Protocol(%d)\n", TabString::get(tabCount + 1), m_name.c_str(), m_type);
+	fprintf(destFile, "%s%s() : catman::net::Protocol(%d)\n", TabString::get(tabCount + 1), m_name.c_str(), m_type);
 	fprintf(destFile, "%s{\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 	// copy constructor
 	std::string paramList;
 	for (FieldList::const_iterator it = m_fields.begin(), ie = m_fields.end(); it != ie; ++ it)
 		paramList += ", " + it->name() + "(" + "other." + it->name() + ")";
-	fprintf(destFile, "%s%s(const %s &other) : catman::common::Protocol(other)%s\n", TabString::get(tabCount + 1), m_name.c_str(), m_name.c_str(), paramList.c_str());
+	fprintf(destFile, "%s%s(const %s &other) : catman::net::Protocol(other)%s\n", TabString::get(tabCount + 1), m_name.c_str(), m_name.c_str(), paramList.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 	// clone method
-	fprintf(destFile, "%scatman::common::Protocol* clone() const\n", TabString::get(tabCount + 1));
+	fprintf(destFile, "%scatman::net::Protocol* clone() const\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s{\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%sreturn new %s(*this);\n", TabString::get(tabCount + 2), m_name.c_str());
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));

@@ -1,9 +1,9 @@
-#include <catman/common/ProcessTask.h>
-#include <catman/common/Protocol.h>
+#include <catman/net/ProcessTask.h>
+#include <catman/net/Protocol.h>
 
 namespace catman
 {
-namespace common
+namespace net
 {
 
 ProcessTask::ProcessTask(Protocol *protocol, net::SessionManager *manager, size_t sessionId) : m_protocol(protocol), m_manager(manager), m_sessionId(sessionId)

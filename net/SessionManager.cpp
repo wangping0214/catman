@@ -27,7 +27,7 @@ bool SessionManager::send(uint32_t sessionId, common::Octets data)
 	return false;
 }
 
-bool SessionManager::send(uint32_t sessionId, common::Protocol *protocol)
+bool SessionManager::send(uint32_t sessionId, Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
 	Session *s = session(sessionId);
@@ -38,7 +38,7 @@ bool SessionManager::send(uint32_t sessionId, common::Protocol *protocol)
 	return false;
 }
 
-bool SessionManager::send(uint32_t sessionId, const common::Protocol *protocol)
+bool SessionManager::send(uint32_t sessionId, const Protocol *protocol)
 {
 	thread::ReadLocker locker(&m_mapRWLock);
 	Session *s = session(sessionId);
@@ -47,12 +47,12 @@ bool SessionManager::send(uint32_t sessionId, const common::Protocol *protocol)
 	return false;
 }
 
-bool SessionManager::send(uint32_t sessionId, common::Protocol &protocol)
+bool SessionManager::send(uint32_t sessionId, Protocol &protocol)
 {
 	return send(sessionId, &protocol);
 }
 
-bool SessionManager::send(uint32_t sessionId, const common::Protocol &protocol)
+bool SessionManager::send(uint32_t sessionId, const Protocol &protocol)
 {
 	return send(sessionId, &protocol);
 }
