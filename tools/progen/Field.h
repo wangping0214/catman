@@ -1,5 +1,9 @@
 #ifndef FIELD_H
 #define FIELD_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
 #include <catman/tinyxml2/tinyxml2.h>
 #include <string>

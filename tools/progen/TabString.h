@@ -1,5 +1,9 @@
 #ifndef TABSTRING_H
 #define TABSTRING_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
 #include <map>
 #include <stddef.h>
