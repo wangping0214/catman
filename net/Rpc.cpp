@@ -127,7 +127,7 @@ void Rpc::process(SessionManager *manager, uint32_t sessionId)
 	{
 		Rpc *resRpc;
 		{
-			thread::ReadLocker locker(&s_rpcMapLock);		
+			thread::WriteLocker locker(&s_rpcMapLock);		
 			IdRpcMap::iterator it = s_rpcMap.find(m_rpcId);
 			if (it == s_rpcMap.end())
 				return;
