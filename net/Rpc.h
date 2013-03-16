@@ -125,7 +125,7 @@ public:
 	virtual const common::OctetsStream& unmarshal(const common::OctetsStream &stream);
 };
 
-class Rpc : Protocol
+class Rpc : public Protocol
 {	
 private:
 	class RpcId : public common::Marshal
@@ -168,7 +168,7 @@ public:
 	const common::OctetsStream& unmarshal(const common::OctetsStream &stream);
 	static Rpc* call(uint32_t type);
 	static Rpc* call(uint32_t type, const RpcData &arg);
-private:
+protected:
 	RpcId m_rpcId;
 	RpcData *m_argument;
 	RpcData *m_result;

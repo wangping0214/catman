@@ -14,7 +14,7 @@ ProDef::~ProDef()
 {
 }
 
-void ProDef::write(const std::string &path, int tabCount)
+void ProDef::write(const std::string &path, int tabCount) const
 {
 	std::string dirPath(path);
 	if (!dirPath.empty())
@@ -40,13 +40,13 @@ void ProDef::write(const std::string &path, int tabCount)
 	}
 }
 
-void ProDef::writeVolatile(FILE *destFile, int tabCount)
+void ProDef::writeVolatile(FILE *destFile, int tabCount) const
 {
 	writeFields(destFile, tabCount);
 	writeMethods(destFile, tabCount);
 }
 
-void ProDef::writeSteady(FILE *destFile, int tabCount)
+void ProDef::writeSteady(FILE *destFile, int tabCount) const
 {
 	std::string upperName;
 	std::transform(m_name.begin(), m_name.end(), std::back_inserter(upperName), toupper);
@@ -68,14 +68,14 @@ void ProDef::writeSteady(FILE *destFile, int tabCount)
 	fprintf(destFile, "#endif\n");
 }
 
-void ProDef::writeFields(FILE *destFile, int tabCount)
+void ProDef::writeFields(FILE *destFile, int tabCount) const
 {
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
 	for (FieldList::const_iterator it = m_fields.begin(), ie = m_fields.end(); it != ie; ++ it)
 		it->write(destFile, tabCount + 1);
 }
 
-void ProDef::writeMethods(FILE *destFile, int tabCount)
+void ProDef::writeMethods(FILE *destFile, int tabCount) const
 {
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
 	// default constructor

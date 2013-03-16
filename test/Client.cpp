@@ -11,6 +11,9 @@
 #include <catman/common/OctetsStream.h>
 #include <PlayerLogin.h>
 #include <LoginResponse.h>
+#include <Register.h>
+#include <RegisterArg>
+#include <RegisterRes>
 
 using namespace std;
 
@@ -18,6 +21,7 @@ log4cxx::LoggerPtr g_logger(log4cxx::Logger::getLogger("myapp"));
 
 PlayerLogin g_PlayerLogin;
 LoginResponse g_LoginResponse;
+Register g_Register(new RegisterArg, new RegisterRes);
 
 class Client : public catman::net::SessionManager
 {
@@ -34,6 +38,11 @@ public:
 			catman::common::LogDebug(g_logger, "send successfully");
 		else
 			catman::common::LogDebug(g_logger, "send unsuccessfully");
+		RegisterArg arg;
+		arg.userName = "catman";
+		arg.password = "test";
+		catman::net::Rpc *registerRpc = catman::net::Rpc::call(3, arg);
+		send(sessionId, registerRpc);
 	}
 	virtual void onDeleteSession(uint32_t sessionId)
 	{

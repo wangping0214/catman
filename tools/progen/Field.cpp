@@ -2,8 +2,10 @@
 #include "TabString.h"
 
 Field::Field(const tinyxml2::XMLElement *fieldElem) : m_name(fieldElem->Attribute("name")), 
-	m_type(fieldElem->Attribute("type")), m_attr(fieldElem->Attribute("attr"))
+	m_type(fieldElem->Attribute("type"))
 {
+	if (NULL != fieldElem->Attribute("attr"))
+		m_attr = fieldElem->Attribute("attr");
 }
 
 Field::~Field()

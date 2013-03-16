@@ -1,4 +1,6 @@
 #include "ProDef.h"
+#include "RpcDataDef.h"
+#include "RpcDef.h"
 #include <catman/tinyxml2/tinyxml2.h>
 #include <stdio.h>
 #include <assert.h>
@@ -42,7 +44,16 @@ int main(int argc, char *argv[])
 			ProDef proDef(elem);
 			proDef.write(outPath, 1);
 		}
-		// else if
+		else if ("rpcdata" == genType)
+		{
+			RpcDataDef dataDef(elem);
+			dataDef.write(outPath, 0);
+		}
+		else if ("rpc" == genType)
+		{
+			RpcDef rpcDef(elem);
+			rpcDef.write(outPath, 0);
+		}
 	}
 	
 	return 0;

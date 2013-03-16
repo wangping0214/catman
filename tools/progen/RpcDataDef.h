@@ -1,31 +1,28 @@
-#ifndef PRODEF_H
-#define PRODEF_H
+#ifndef RPCDATADEF_H
+#define RPCDATADEF_H
 /**************************************************************
  * (C) Copyright 2013 Alanmars
  * Keep it simple at first 
  *************************************************************/
 
-#include <catman/tinyxml2/tinyxml2.h>
 #include "Field.h"
+#include <catman/tinyxml2/tinyxml2.h>
 #include <vector>
-#include <assert.h>
 
-class ProDef
+class RpcDataDef
 {
 	typedef std::vector<Field> FieldList;
 public:
-	ProDef(const tinyxml2::XMLElement *proElem);
-	~ProDef();
-	void write(const std::string &path, int tabCount) const;
+	RpcDataDef(const tinyxml2::XMLElement *defElem);
+	~RpcDataDef();
+	void write(const std::string &dirPath, int tabCount) const;
 private:
-	void writeVolatile(FILE *destFile, int tabCount) const;
-	void writeSteady(FILE *destFile, int tabCount) const;
 	void writeFields(FILE *destFile, int tabCount) const;
 	void writeMethods(FILE *destFile, int tabCount) const;
 private:
 	std::string m_name;
-	int	m_type;
 	FieldList m_fields;
 };
 
 #endif
+
