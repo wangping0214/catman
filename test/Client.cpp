@@ -32,12 +32,14 @@ public:
 		PlayerLogin login;
 		login.userName = "wangping";
 		login.password = "admin";
-		catman::common::LogDebug(g_logger, "begin to send login request");
+//		catman::common::LogDebug(g_logger, "begin to send login request");
 		bool isSend = send(sessionId, login);
+		/*
 		if (isSend)
 			catman::common::LogDebug(g_logger, "send successfully");
 		else
 			catman::common::LogDebug(g_logger, "send unsuccessfully");
+			*/
 		RegisterArg arg;
 		arg.userName = "catman";
 		arg.password = "test";

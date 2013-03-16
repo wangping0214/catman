@@ -42,7 +42,7 @@ void StreamIO::pollIn()
 		}
 	}
 	while (recvSize == -1 && errno == EINTR); // was interrupted by signal, then retry.
-//	common::LogDebug(logger, "RecvSize=%d, errno=%d", recvSize, errno);
+	common::LogDebug(logger, "RecvSize=%d, errno=%d", recvSize, errno);
 	// recvSize == 0 means no message are available or peer has done an orderly shutdown.
 	if (recvSize != -1 || errno != EAGAIN)
 	{
@@ -63,6 +63,7 @@ void StreamIO::pollOut()
 		sendSize = write(m_fd, outBuffer.begin(), outBuffer.size());
 		if (sendSize > 0)
 		{
+			common::LogDebug(logger, "SendSize=%d", sendSize);
 			outBuffer.erase(0, sendSize);
 			if (outBuffer.size() == 0)
 				forbidSend();
@@ -72,7 +73,7 @@ void StreamIO::pollOut()
 	while (sendSize == -1 && errno == EINTR); // was interrupted by signal, then retry.
 	
 	// Close event from application layer, guarantee all data have been sent.
-	if (sendSize != 0 && errno != EAGAIN)
+	if (sendSize != -1 || errno != EAGAIN)
 	{
 		m_session->outBuffer().clear();
 		m_session->close(false);

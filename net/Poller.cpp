@@ -61,7 +61,7 @@ void Poller::PollControl::detectCloseEvent()
 
 ///////////////////////////////////////////////////////
 
-Poller::Poller() : m_maxfd(0), m_eventLock("Poller_eventLock")
+Poller::Poller() : m_maxfd(0), m_eventLock("Poller_eventLock"), m_pollLock("Poller_pollLock")
 {
 	FD_ZERO(&m_readSet);
 	FD_ZERO(&m_writeSet);
@@ -91,6 +91,8 @@ PollIO* Poller::registerPollIO(PollIO *pollIO)
 
 void Poller::poll(int timeout)
 {
+	thread::MutexLocker locker(&m_pollLock);
+
 	synchronizeEvent();
 	int eventCount;
 	if (timeout < 0)

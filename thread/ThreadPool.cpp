@@ -74,7 +74,6 @@ void ThreadPool::execute(Runnable *runnable)
 	MutexLocker locker(&m_queueLock);
 	m_runnableQueue.push_front(runnable);
 	m_queueCondition.wakeOne();
-	m_queueLock.unlock();
 }
 
 uint32_t ThreadPool::maximumPoolSize() const
@@ -89,7 +88,6 @@ Runnable* ThreadPool::fetchRunnable()
 		m_queueCondition.wait(&m_queueLock);
 	Runnable *runnable = m_runnableQueue.back();
 	m_runnableQueue.pop_back();
-	m_queueLock.unlock();
 	return runnable;
 }
 

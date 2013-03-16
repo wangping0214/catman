@@ -39,9 +39,9 @@ class OctetsStream
 public:
 	enum UnmarshalTransaction
 	{
-		TransactionBegin,
-		TransactionCommit,
-		TransactionRollback
+		TXNBegin,
+		TXNCommit,
+		TXNRollback
 	};
 public:
 	OctetsStream();
@@ -63,6 +63,7 @@ public:
 	void erase(void *beginPos, void *endPos);
 	void clear();
 	bool atEnd();
+	uint32_t size() const;
 
 	// << operator overload begin
 	OctetsStream& operator << (bool b);

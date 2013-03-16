@@ -65,6 +65,7 @@ private:
 	IOSet m_dirtyIOSet;
 	bool m_canWakeup;
 	thread::Mutex m_eventLock;
+	thread::Mutex m_pollLock;
 
 	static log4cxx::LoggerPtr logger;
 };

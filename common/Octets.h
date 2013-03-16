@@ -66,6 +66,7 @@ public:
 	Octets& reserve(uint32_t size);
 	Octets& resize(uint32_t size);
 	Octets& replace(const void *buff, uint32_t len);
+	void dump();
 private:
 	Rep* rep() const;
 private:

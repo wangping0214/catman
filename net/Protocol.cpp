@@ -59,14 +59,15 @@ common::Octets Protocol::encode()
 Protocol* Protocol::decode(common::OctetsStream &stream)
 {
 	if (stream.atEnd())
-		return false;
+		return NULL;
 	Protocol *protocol = NULL;
 	uint32_t type = 0;
-	stream >> common::OctetsStream::TransactionBegin;
+	stream >> common::OctetsStream::TXNBegin;
 	stream >> type;
+	common::LogDebug(logger, "%u protocol type=%x", stream.size(), type);
 	if ((protocol = create(type)) != NULL)
 		stream >> *protocol;
-	stream >> common::OctetsStream::TransactionCommit;
+	stream >> common::OctetsStream::TXNCommit;
 	// else consider exceptional occasion
 	return protocol;
 }

@@ -104,6 +104,11 @@ bool OctetsStream::atEnd()
 	return m_pos == m_data.size();
 }
 
+uint32_t OctetsStream::size() const
+{
+	return m_data.size();
+}
+
 // >> operator overload begin
 
 OctetsStream& OctetsStream::operator << (bool b)

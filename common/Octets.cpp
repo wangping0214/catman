@@ -1,6 +1,7 @@
 #include <catman/common/Octets.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 namespace catman
 {
@@ -282,6 +283,14 @@ Octets& Octets::replace(const void *buff, uint32_t len)
 	memcpy(m_base, buff, len);
 	rep()->setSize(len);
 	return *this;
+}
+
+void Octets::dump()
+{
+	const unsigned char *p = (const unsigned char*)begin();
+	for (uint32_t i = 0; i < size(); ++ i)
+		printf("%02x", *p++);
+	printf("\n");
 }
 
 Octets::Rep* Octets::rep() const

@@ -60,12 +60,16 @@ bool Session::send(const Protocol *protocol)
 void Session::onRecv()
 {
 	common::OctetsStream stream(m_inBuffer); 	// copy
+	common::LogDebug(logger, "Recv size=%d", m_inBuffer.size());
 	m_inBuffer.clear(); 						// clear
+	uint32_t proCount = 0;
 	for (Protocol *p; (p = Protocol::decode(stream)) != NULL; )
 	{
 		ProcessTask *task = new ProcessTask(p, m_manager, m_id);
 		thread::ThreadPool::instance().execute(task);
+		++ proCount;
 	}
+	common::LogDebug(logger, "Recv pro count=%u", proCount);
 }
 
 void Session::onOpen()

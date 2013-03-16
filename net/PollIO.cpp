@@ -30,6 +30,7 @@ void PollIO::permitRecv()
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
 	if (m_eventDirty)
 		m_cachedEvent |= POLLIN;
+	else
 	{
 		m_cachedEvent = m_event | POLLIN;
 		m_eventDirty = true;
@@ -56,7 +57,7 @@ void PollIO::forbidRecv()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
 	if (m_eventDirty)
-		m_cachedEvent |= ~POLLIN;
+		m_cachedEvent &= ~POLLIN;
 	else
 	{
 		m_cachedEvent = m_event & ~POLLIN;
@@ -70,7 +71,7 @@ void PollIO::forbidSend()
 {
 	thread::MutexLocker locker(&(Poller::instance().eventLock()));
 	if (m_eventDirty)
-		m_cachedEvent |= ~POLLOUT;
+		m_cachedEvent &= ~POLLOUT;
 	else
 	{
 		m_cachedEvent = m_event & ~POLLOUT;
