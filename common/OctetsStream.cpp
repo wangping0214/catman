@@ -189,19 +189,22 @@ OctetsStream& OctetsStream::pushBytes(const char *buffer, uint32_t len)
 
 // >> operator overload begin 
 
-OctetsStream& OctetsStream::operator >> (UnmarshalTransaction transaction)
+OctetsStream& OctetsStream::operator >> (UnmarshalTXN txn)
 {
-	switch (transaction)
+	switch (txn)
 	{
-	case TransactionBegin:
-		m_tranPos = m_pos;
+	case TXNBegin:
+		m_txnPos = m_pos;
 		break;
-	case TransactionRollback:
-		m_pos = m_tranPos;
+	case TXNRollback:
+		m_pos = m_txnPos;
 		break;
-	case TransactionCommit:
-		erase(0, m_pos);
-		m_pos = 0;
+	case TXNCommit:
+		if (m_pos >= 16384)
+		{
+			erase(0, m_pos);
+			m_pos = 0;
+		}
 	}
 	return *this;
 }

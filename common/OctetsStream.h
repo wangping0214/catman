@@ -37,7 +37,7 @@ private:
 class OctetsStream
 {
 public:
-	enum UnmarshalTransaction
+	enum UnmarshalTXN
 	{
 		TXNBegin,
 		TXNCommit,
@@ -115,7 +115,7 @@ public:
 	}
 	// << operator overload end
 
-	OctetsStream& operator >> (UnmarshalTransaction transaction);
+	OctetsStream& operator >> (UnmarshalTXN txn);
 	const OctetsStream& operator >> (bool &b) const;
 	const OctetsStream& operator >> (int8_t &c) const;
 	const OctetsStream& operator >> (uint8_t &uc) const;
@@ -185,7 +185,7 @@ private:
 private:
 	Octets m_data;
 	mutable uint32_t m_pos;	// For output
-	mutable uint32_t m_tranPos; 	// For transaction
+	mutable uint32_t m_txnPos; 	// For transaction
 };
 
 template<typename container> OctetsStream& STLContainer<container>::marshal(OctetsStream &stream) const
