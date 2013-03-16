@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <limits.h>
 
 namespace catman
 {
@@ -235,8 +234,6 @@ Octets& Octets::erase(void *beginPos, void *endPos)
 		void *tmp = m_base;
 		m_base = rep()->unique();
 		ptrdiff_t diff = (char*)m_base - (char*)tmp;
-		if (diff > UINT_MAX)
-			printf("Invalid addr: %lx\n", diff);	
 		if (diff)
 		{
 			beginPos = (char*)beginPos + diff;
