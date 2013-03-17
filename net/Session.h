@@ -21,6 +21,7 @@ class PollIO;
 class SessionIO;
 class StreamIO;
 class SessionManager;
+class SocketAddress;
 
 class Session
 {
@@ -36,6 +37,7 @@ public:
 	bool send(const Protocol *protocol);
 	virtual void onRecv();			// transport layer 		->	session layer
 	virtual void onOpen();			// transport layer		->	session layer
+	virtual void onOpen(const SocketAddress &local, const SocketAddress &peer);
 	virtual void onClose();
 	virtual void onAbort();
 	void close(bool needLock);

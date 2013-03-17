@@ -1,5 +1,6 @@
 #include <catman/net/StreamIO.h>
 #include <catman/net/Session.h>
+#include <catman/net/SocketAddress.h>
 #include <catman/common/LogUtil.h>
 #include <unistd.h>
 #include <errno.h>
@@ -14,7 +15,13 @@ log4cxx::LoggerPtr StreamIO::logger(log4cxx::Logger::getLogger("catman/net/Strea
 
 StreamIO::StreamIO(int fd, int initEvent, Session *session) : SessionIO(fd, initEvent, session)
 {
-	m_session->onOpen();
+	struct sockaddr_in local, peer;
+	socklen_t localLen = sizeof(local);
+	socklen_t peerLen = sizeof(peer);
+	if (getsockname(fd, (struct sockaddr*)(&local), &localLen) == -1 || getpeername(fd, (struct sockaddr*)(&peer), &peerLen))
+		m_session->onOpen();
+	else
+		m_session->onOpen(SocketAddress(local), SocketAddress(peer));
 }
 
 StreamIO::~StreamIO()

@@ -2,6 +2,7 @@
 #include <catman/net/PollIO.h>
 #include <catman/net/Protocol.h>
 #include <catman/net/ProcessTask.h>
+#include <catman/net/SocketAddress.h>
 #include <catman/common/OctetsStream.h>
 #include <catman/common/LogUtil.h>
 #include <catman/thread/ThreadPool.h>
@@ -72,6 +73,12 @@ void Session::onRecv()
 void Session::onOpen()
 {
 	m_manager->addSession(m_id, this);
+}
+
+void Session::onOpen(const SocketAddress &local, const SocketAddress &peer)
+{
+	onOpen();
+	common::LogDebug(logger, "%s:%u connected to %s:%u", peer.ipAddress().c_str(), (uint32_t)peer.port(), local.ipAddress().c_str(), (uint32_t)local.port());
 }
 
 void Session::onClose()
