@@ -14,7 +14,7 @@ RpcDataDef::~RpcDataDef()
 {
 }
 
-void RpcDataDef::write(const std::string &dirPath, int tabCount) const
+void RpcDataDef::write(const std::string &dirPath, uint32_t tabCount) const
 {
 	std::string filePath(dirPath);
 	if (!filePath.empty())
@@ -42,14 +42,14 @@ void RpcDataDef::write(const std::string &dirPath, int tabCount) const
 	fprintf(destFile, "\n");
 }
 
-void RpcDataDef::writeFields(FILE *destFile, int tabCount) const
+void RpcDataDef::writeFields(FILE *destFile, uint32_t tabCount) const
 {
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
 	for (FieldList::const_iterator it = m_fields.begin(), ie = m_fields.end(); it != ie; ++ it)
 		it->write(destFile, tabCount + 1);
 }
 
-void RpcDataDef::writeMethods(FILE *destFile, int tabCount) const
+void RpcDataDef::writeMethods(FILE *destFile, uint32_t tabCount) const
 {
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
 	// default constructor
@@ -96,5 +96,4 @@ void RpcDataDef::writeMethods(FILE *destFile, int tabCount) const
 	fprintf(destFile, "%sreturn stream;\n", TabString::get(tabCount + 2));
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 }
-
 

@@ -12,7 +12,7 @@ RpcDef::~RpcDef()
 {
 }
 
-void RpcDef::write(const std::string &dirPath, int tabCount) const
+void RpcDef::write(const std::string &dirPath, uint32_t tabCount) const
 {
 	std::string filePath(dirPath);
 	if (!filePath.empty())
@@ -56,5 +56,4 @@ void RpcDef::write(const std::string &dirPath, int tabCount) const
 	fprintf(destFile, "%s#endif\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
 }
-
 

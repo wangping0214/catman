@@ -12,7 +12,7 @@ Field::~Field()
 {
 }
 
-void Field::write(FILE *destFile, int tabCount) const
+void Field::write(FILE *destFile, uint32_t tabCount) const
 {
 	fprintf(destFile, "%s%s %s;\n", TabString::get(tabCount), m_type.c_str(), m_name.c_str());
 }
@@ -31,3 +31,4 @@ const std::string& Field::attr() const
 {
 	return m_attr;
 }
+

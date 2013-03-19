@@ -17,7 +17,7 @@ TabString& TabString::instance()
 	return ts;
 }
 
-const char* TabString::get(size_t tabCount)
+const char* TabString::get(uint32_t tabCount)
 {
 	TabStringMap &tabMap = instance().m_tabMap;
 	TabStringMap::const_iterator it = tabMap.find(tabCount);

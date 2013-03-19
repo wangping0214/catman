@@ -8,13 +8,14 @@
 #include <catman/tinyxml2/tinyxml2.h>
 #include <string>
 #include <stdio.h>
+#include <stdint.h>
 
 class Field
 {
 public:
 	Field(const tinyxml2::XMLElement *fieldElem);
 	~Field();
-	void write(FILE* destFile, int tabCount) const;
+	void write(FILE* destFile, uint32_t tabCount) const;
 	const std::string& name() const;
 	const std::string& type() const;
 	const std::string& attr() const;

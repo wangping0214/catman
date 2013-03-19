@@ -42,17 +42,17 @@ int main(int argc, char *argv[])
 		if ("protocol" == genType)
 		{
 			ProDef proDef(elem);
-			proDef.write(outPath, 1);
+			proDef.write(outPath, uint32_t(1));
 		}
 		else if ("rpcdata" == genType)
 		{
 			RpcDataDef dataDef(elem);
-			dataDef.write(outPath, 0);
+			dataDef.write(outPath, uint32_t(0));
 		}
 		else if ("rpc" == genType)
 		{
 			RpcDef rpcDef(elem);
-			rpcDef.write(outPath, 0);
+			rpcDef.write(outPath, uint32_t(0));
 		}
 	}
 	
