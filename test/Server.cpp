@@ -8,6 +8,7 @@
 #include <catman/common/OctetsStream.h>
 #include <catman/common/LogUtil.h>
 #include <iostream>
+#include <locale.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/consoleappender.h>
@@ -46,7 +47,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-//	log4cxx::BasicConfigurator::configure();
+	printf("%s\n", setlocale(LC_ALL, NULL));
 	log4cxx::PatternLayout layout("%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c %L %-5p - %m%n");
 	log4cxx::ConsoleAppender appender(&layout);
 	log4cxx::Logger::getRootLogger()->addAppender(&appender);

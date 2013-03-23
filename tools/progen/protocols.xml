@@ -5,6 +5,7 @@
 		<variable name="password" type="std::string" attr="ref"/>
 	</protocol>
 	<protocol name="LoginResponse" type="2">
+		<variable name="retcode" type="int8_t"/>
 		<variable name="loginResult" type="std::string" attr="ref"/>
 	</protocol>
 	<rpc name="Register" type="3">
