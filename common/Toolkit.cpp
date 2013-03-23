@@ -36,6 +36,11 @@ void StringReplace(char *str, const char *torep, const char *rep)
 	free(result);
 }
 
+bool MakePath(const std::string &dirPath, mode_t mode)
+{
+	return true;
+}
+
 }
 }
 

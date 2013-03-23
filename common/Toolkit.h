@@ -14,6 +14,12 @@ namespace common
  */
 void StringReplace(char *str, const char *torep, const char *rep);
 
+/* Creates the directory path dirPath.
+ * The function will create all parent directories necessary to create the directory.
+ * Returns true if successful; otherwise returns false.
+ * If the path already exists when this function is called, it will return true. */
+bool MakePath(const std::string &dirPath, mode_t mode);
+
 }
 }
 
