@@ -6,12 +6,11 @@ namespace catman
 namespace common
 {
 
-/*
- * 将str中的torep都替换成rep。
+/* Replace all occurence of torep in str with rep.
  * 
- * str 		- 需要修改的字符串
- * torep 	- 被替换的字符串
- * rep 		- 替换的字符串 
+ * str 		- the dest str.
+ * torep 	- the substr to be replaced.
+ * rep 		- the substr to replace.
  */
 void StringReplace(char *str, const char *torep, const char *rep);
 
