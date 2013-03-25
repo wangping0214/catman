@@ -62,12 +62,22 @@ Protocol* Protocol::decode(common::OctetsStream &stream)
 		return NULL;
 	Protocol *protocol = NULL;
 	uint32_t type = 0;
-	stream >> common::OctetsStream::TXNBegin;
-	stream >> type;
-	if ((protocol = create(type)) != NULL)
-		stream >> *protocol;
-	stream >> common::OctetsStream::TXNCommit;
-	// else consider exceptional occasion
+	try
+	{
+		stream >> common::OctetsStream::TXNBegin;
+		stream >> type;
+		if ((protocol = create(type)) != NULL)
+			stream >> *protocol;
+		stream >> common::OctetsStream::TXNCommit;
+	}
+	catch(common::MarshalException &e)
+	{
+		if (protocol)
+		{
+			common::LogDebug(logger, "Protocol(type=%u) decode error", type);
+		}
+		stream >> common::OctetsStream::TXNRollback;
+	}
 	return protocol;
 }
 

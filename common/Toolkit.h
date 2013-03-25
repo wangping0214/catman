@@ -1,6 +1,9 @@
 #ifndef TOOLKIT_H
 #define TOOLKIT_H
 
+#include <string>
+#include <sys/stat.h>
+
 namespace catman
 {
 namespace common

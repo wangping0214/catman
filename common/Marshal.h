@@ -5,12 +5,22 @@
  * Keep it simple at first 
  *************************************************************/
 
+#include <stdexcept>
+
 namespace catman
 {
 namespace common
 {
 
 class OctetsStream;
+
+class MarshalException : public std::exception
+{
+public:
+	MarshalException();
+	virtual ~MarshalException() throw();
+	virtual const char* what() const throw();
+};
 
 class Marshal
 {

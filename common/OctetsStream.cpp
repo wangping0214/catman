@@ -287,7 +287,7 @@ const OctetsStream& OctetsStream::operator >> (Octets &octets) const
 	uint32_t len;
 	operator >> (len);
 	if (len > m_data.size() - m_pos)
-		; // TODO exceptional
+		throw MarshalException(); 
 	octets.replace((char*)m_data.begin() + m_pos, len);
 	m_pos += len;
 	return *this;
@@ -296,7 +296,7 @@ const OctetsStream& OctetsStream::operator >> (Octets &octets) const
 const OctetsStream& OctetsStream::popBytes(char *buff, uint32_t len) const
 {
 	if (len > m_data.size() - m_pos)
-		; // TODO exceptional
+		throw MarshalException(); 
 	memcpy(buff, (char*)m_data.begin() + m_pos, len);
 	m_pos += len;
 	return *this;

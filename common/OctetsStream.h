@@ -134,6 +134,10 @@ public:
 	{
 		uint32_t size;
 		operator >> (size);
+		if (size % sizeof(T))
+			throw MarshalException();
+		if (size > (m_data.size() - m_pos))
+			throw MarshalException();
 		uint32_t ts = size / sizeof(T);
 		str.assign((T*)((char*)m_data.begin() + m_pos), ts);
 		m_pos += size;
@@ -174,7 +178,7 @@ private:
 	template<typename T> void popT(T &val) const
 	{
 		if (m_pos + sizeof(T) > m_data.size())
-			;
+			throw MarshalException();
 		val = *(T*)((char*)m_data.begin() + m_pos);
 		m_pos += sizeof(T);
 	}
