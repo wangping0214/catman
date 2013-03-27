@@ -3,7 +3,7 @@ FLAGS = -ggdb -Wall -DHAVE_CXX_STDHEADERS
 #INCLUDES = -I/home/alan/workspace
 DB_PATH = /usr/local/BerkeleyDB.5.3
 INCLUDES = -I.. -I$(DB_PATH)/include
-LIBS = -L$(DB_PATH)/lib -ldb -lpthread 
+LIBS = -L$(DB_PATH)/lib -ldb_cxx -lpthread 
 CPPFILES = $(wildcard ./common/*.cpp) $(wildcard ./net/*.cpp) $(wildcard ./thread/*.cpp) $(wildcard ./db/*.cpp) \
 		   $(wildcard ./tinyxml2/*.cpp)
 OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))

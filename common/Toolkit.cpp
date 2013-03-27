@@ -38,6 +38,24 @@ void StringReplace(char *str, const char *torep, const char *rep)
 
 bool MakePath(const std::string &dirPath, mode_t mode)
 {
+	if (dirPath.empty())
+		return false;
+	std::string tmp(dirPath);
+	if (tmp.find_last_of('/') != (tmp.size() - 1))
+		tmp += '/';
+	struct stat dirStat;
+	// skip root path
+	for (std::string::size_type i = tmp.find_first_of('/', 1); i != std::string::npos; i = tmp.find_first_of('/', i + 1))
+	{
+		const std::string &subdir = tmp.substr(0, i);
+		if (stat(subdir.c_str(), &dirStat) != 0)
+		{
+			if (mkdir(subdir.c_str(), mode) != 0)
+				return false;
+		}
+		else if (!S_ISDIR(dirStat.st_mode))
+			return false;
+	}
 	return true;
 }
 

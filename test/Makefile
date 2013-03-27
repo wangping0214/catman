@@ -1,12 +1,13 @@
 CXX = g++ 
-FLAGS = -ggdb -Wall
-INCLUDES = -I/home/alan/workspace -I./prodef
-LIBS = ../libcatman.so -llog4cxx -lpthread
+FLAGS = -ggdb -Wall -DHAVE_CXX_STDHEADERS
+DB_PATH = /usr/local/BerkeleyDB.5.3
+INCLUDES = -I/home/alan/workspace -I./prodef -I$(DB_PATH)/include
+LIBS = ../libcatman.so -llog4cxx -L$(DB_PATH)/lib -ldb_cxx -lpthread
 #CPPFILES = $(wildcard *.cpp)
 #OBJS = $(patsubst %.cpp,%.o,$(CPPFILES))
 #EXE = test
 
-all : Server Client OctetsTest
+all : Server Client catmandbd
 
 #$(EXE) : $(OBJS)
 #	$(CXX) -o $(EXE) $(OBJS) $(LIBS)
@@ -29,6 +30,12 @@ Client : Client.o
 Client.o : Client.cpp
 	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
+catmandbd : catmandbd.o
+	$(CXX) -o $@ $< $(LIBS)
+
+catmandbd.o : catmandbd.cpp
+	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
+
 OctetsTest : OctetsTest.o
 	$(CXX) -o $@ $< $(LIBS)
 
@@ -39,7 +46,7 @@ OctetsTest.o : OctetsTest.cpp
 #	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 clean :
-	rm -r $(wildcard *.o) Server Client OctetsTest
+	rm -r $(wildcard *.o) Server Client catmandbd
 #-rm -r $(OBJS) $(EXE) Server Client
 
 

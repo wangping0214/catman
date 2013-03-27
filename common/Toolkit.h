@@ -1,5 +1,9 @@
 #ifndef TOOLKIT_H
 #define TOOLKIT_H
+/**************************************************************
+ * (C) Copyright 2013 Alanmars
+ * Keep it simple at first 
+ *************************************************************/
 
 #include <string>
 #include <sys/stat.h>
