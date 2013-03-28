@@ -20,6 +20,12 @@ class Table
 {
 	friend class Database;
 public:
+	template<typename K, typename V> class Traverser
+	{
+	public:
+		virtual void traverse(K &key, V &value) = 0;
+	};
+public:
 	virtual ~Table();
 	template<typename K, typename V>  int32_t get(const K &key, V &value) throw (DbException)
 	{
@@ -47,6 +53,23 @@ public:
 		kos << key;
 		Dbt kdbt(kos.begin(), kos.size());
 		return m_db->del(NULL, &kdbt, 0);
+	}
+	template<typename K, typename V> void traverse(Traverser<K, V> &traverser) throw (DbException)
+	{
+		Dbc *cursorPtr;
+		m_db->cursor(NULL, &cursorPtr, 0);
+		Dbt key, value;
+		while (cursorPtr->get(&key, &value, DB_NEXT) == 0)
+		{
+			K k;
+			V v;
+			common::OctetsStream kos(common::Octets(key.get_data(), key.get_size()));
+			kos >> k;
+			common::OctetsStream vos(common::Octets(value.get_data(), value.get_size()));
+			vos >> v;
+			traverser.traverse(k, v);
+		}
+		cursorPtr->close();
 	}
 private:
 	Table(Db *db);

@@ -3,6 +3,22 @@
 #include <RegisterArg>
 #include <iostream>
 
+template<typename K, typename V> class SimpleTraverser : public catman::db::Table::Traverser<K, V>
+{
+public:
+	void traverse(K &key, V &value)
+	{
+	}
+};
+
+class SecTraverser : public catman::db::Table::Traverser<int, RegisterArg>
+{
+public:
+	void traverse(int &key, RegisterArg &value)
+	{
+	}
+};
+
 int main(int argc, char *argv[])
 {
 	/*
@@ -21,6 +37,9 @@ int main(int argc, char *argv[])
 	table.get(1, arg);
 	std::cout << arg.userName << std::endl;
 	std::cout << arg.password << std::endl;
+//	SimpleTraverser<int, RegisterArg> st;
+	SecTraverser st;
+	table.traverse(st);
 
 	return 0;
 }
