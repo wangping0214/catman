@@ -14,7 +14,7 @@ RpcDataDef::~RpcDataDef()
 {
 }
 
-void RpcDataDef::write(const std::string &dirPath, uint32_t tabCount) const
+void RpcDataDef::write(const std::string &dirPath, const std::string &ns, uint32_t tabCount) const
 {
 	std::string filePath(dirPath);
 	if (!filePath.empty())
@@ -32,12 +32,23 @@ void RpcDataDef::write(const std::string &dirPath, uint32_t tabCount) const
 	fprintf(destFile, "\n");
 	fprintf(destFile, "%s#include <catman/net/Rpc.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%snamespace %s\n", TabString::get(tabCount), ns.c_str());
+		fprintf(destFile, "%s{\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "%sclass %s : public catman::net::RpcData\n", TabString::get(tabCount), m_name.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));
 	writeFields(destFile, tabCount);
 	writeMethods(destFile, tabCount);
 	fprintf(destFile, "%s};\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%s}\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "%s#endif\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
 }

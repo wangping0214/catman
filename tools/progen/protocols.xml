@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application namespace="">
+<application namespace="protocol">
 	<protocol name="PlayerLogin" type="1">
 		<variable name="userName" type="std::string" attr="ref"/>
 		<variable name="password" type="std::string" attr="ref"/>
@@ -8,8 +8,7 @@
 		<variable name="retcode" type="int8_t"/>
 		<variable name="loginResult" type="std::string" attr="ref"/>
 	</protocol>
-	<rpc name="Register" type="3">
-	</rpc>
+	<rpc name="Register" type="3" argument="RegisterArg" result="RegisterRes"/>
 	<rpcdata name="RegisterArg">
 		<variable name="userName" type="std::string" attr="ref"/>
 		<variable name="password" type="std::string" attr="ref"/>

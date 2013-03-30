@@ -11,10 +11,10 @@ public:
 	}
 };
 
-class SecTraverser : public catman::db::Table::Traverser<int, RegisterArg>
+class SecTraverser : public catman::db::Table::Traverser<int, protocol::RegisterArg>
 {
 public:
-	void traverse(int &key, RegisterArg &value)
+	void traverse(int &key, protocol::RegisterArg &value)
 	{
 	}
 };
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	catman::db::Database db;
 	db.open("dbhome");
 	catman::db::Table table = db.getTable("player");
-	RegisterArg arg;
+	protocol::RegisterArg arg;
 	/*
 	arg.userName = "wangping";
 	arg.password = "admin";

@@ -9,23 +9,15 @@
 #include <catman/common/LogUtil.h>
 #include <iostream>
 #include <locale.h>
+#include <stdio.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/consoleappender.h>
 #include <log4cxx/patternlayout.h>
-#include <PlayerLogin.h>
-#include <LoginResponse.h>
-#include <Register.h>
-#include <RegisterArg>
-#include <RegisterRes>
 
 using namespace std;
 
 log4cxx::LoggerPtr g_logger(log4cxx::Logger::getLogger("myapp"));
-
-PlayerLogin g_PlayerLogin;
-LoginResponse g_LoginResponse;
-Register g_Register(new RegisterArg, new RegisterRes);
 
 class Server : public catman::net::SessionManager
 {

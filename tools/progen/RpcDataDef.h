@@ -15,7 +15,7 @@ class RpcDataDef
 public:
 	RpcDataDef(const tinyxml2::XMLElement *defElem);
 	~RpcDataDef();
-	void write(const std::string &dirPath, uint32_t tabCount) const;
+	void write(const std::string &dirPath, const std::string &ns, uint32_t tabCount) const;
 private:
 	void writeFields(FILE *destFile, uint32_t tabCount) const;
 	void writeMethods(FILE *destFile, uint32_t tabCount) const;

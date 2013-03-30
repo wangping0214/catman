@@ -16,10 +16,11 @@ class ProDef
 public:
 	ProDef(const tinyxml2::XMLElement *proElem);
 	~ProDef();
-	void write(const std::string &path, uint32_t tabCount) const;
+	void write(const std::string &path, const std::string &ns, uint32_t tabCount) const;
+	std::string name() const;
 private:
 	void writeVolatile(FILE *destFile, uint32_t tabCount) const;
-	void writeSteady(FILE *destFile, uint32_t tabCount) const;
+	void writeSteady(FILE *destFile, const std::string &ns, uint32_t tabCount) const;
 	void writeFields(FILE *destFile, uint32_t tabCount) const;
 	void writeMethods(FILE *destFile, uint32_t tabCount) const;
 private:

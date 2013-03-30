@@ -3,16 +3,16 @@
 #include <algorithm>
 #include <iterator>
 
-RpcDef::RpcDef(const tinyxml2::XMLElement *rpcElem) : m_name(rpcElem->Attribute("name"))
+RpcDef::RpcDef(const tinyxml2::XMLElement *rpcElem) : m_name(rpcElem->Attribute("name")), m_type(atoi(rpcElem->Attribute("type"))),
+	m_argument(rpcElem->Attribute("argument")), m_result(rpcElem->Attribute("result"))
 {	
-	m_type = atoi(rpcElem->Attribute("type"));
 }
 
 RpcDef::~RpcDef()
 {
 }
 
-void RpcDef::write(const std::string &dirPath, uint32_t tabCount) const
+void RpcDef::write(const std::string &dirPath, const std::string &ns, uint32_t tabCount) const
 {
 	std::string filePath(dirPath);
 	if (!filePath.empty())
@@ -29,8 +29,16 @@ void RpcDef::write(const std::string &dirPath, uint32_t tabCount) const
 	fprintf(destFile, "%s#ifndef %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "%s#define %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "\n");
+	fprintf(destFile, "%s#include \"%s\"\n", TabString::get(tabCount), m_argument.c_str());
+	fprintf(destFile, "%s#include \"%s\"\n", TabString::get(tabCount), m_result.c_str());
 	fprintf(destFile, "%s#include <catman/net/Rpc.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%snamespace %s\n", TabString::get(tabCount), ns.c_str());
+		fprintf(destFile, "%s{\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "%sclass %s : public catman::net::Rpc\n", TabString::get(tabCount), m_name.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));
 	fprintf(destFile, "%spublic:\n", TabString::get(tabCount));
@@ -53,7 +61,27 @@ void RpcDef::write(const std::string &dirPath, uint32_t tabCount) const
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s};\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%s}\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "%s#endif\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+}
+
+std::string RpcDef::name() const
+{
+	return m_name;
+}
+
+std::string RpcDef::argument() const
+{
+	return m_argument;
+}
+
+std::string RpcDef::result() const
+{
+	return m_result;
 }
 

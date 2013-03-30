@@ -19,28 +19,23 @@ using namespace std;
 
 log4cxx::LoggerPtr g_logger(log4cxx::Logger::getLogger("myapp"));
 
-PlayerLogin g_PlayerLogin;
-LoginResponse g_LoginResponse;
-Register g_Register(new RegisterArg, new RegisterRes);
-
 class Client : public catman::net::SessionManager
 {
 public:
 	virtual void onAddSession(uint32_t sessionId)
 	{
 		catman::common::LogDebug(g_logger, "OnAddSession: %lu", sessionId);
-		PlayerLogin login;
+		protocol::PlayerLogin login;
 		login.userName = "wangping";
 		login.password = "admin";
 //		catman::common::LogDebug(g_logger, "begin to send login request");
-		bool isSend = send(sessionId, login);
 		/*
 		if (isSend)
 			catman::common::LogDebug(g_logger, "send successfully");
 		else
 			catman::common::LogDebug(g_logger, "send unsuccessfully");
 			*/
-		RegisterArg arg;
+		protocol::RegisterArg arg;
 		arg.userName = "catman";
 		arg.password = "test";
 		catman::net::Rpc *registerRpc = catman::net::Rpc::call(3, arg);

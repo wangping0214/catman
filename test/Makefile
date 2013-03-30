@@ -18,16 +18,19 @@ tinyxml2_test : tinyxml2_test.o
 tinyxml2_test.o : tinyxml2_test.cpp
 	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
-Server : Server.o
-	$(CXX) -o $@ $< $(LIBS)
+Server : Server.o prodef/ProtocolStubs.o
+	$(CXX) -o $@ Server.o prodef/ProtocolStubs.o $(LIBS)
 
 Server.o : Server.cpp
 	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
-Client : Client.o
-	$(CXX) -o $@ $< $(LIBS)
+Client : Client.o prodef/ProtocolStubs.o
+	$(CXX) -o $@ Client.o prodef/ProtocolStubs.o $(LIBS)
 
 Client.o : Client.cpp
+	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+prodef/ProtocolStubs.o : prodef/ProtocolStubs.cpp
 	$(CXX) $(FLAGS) $(INCLUDES) -c $< -o $@
 
 catmandbd : catmandbd.o

@@ -14,7 +14,7 @@ ProDef::~ProDef()
 {
 }
 
-void ProDef::write(const std::string &path, uint32_t tabCount) const
+void ProDef::write(const std::string &path, const std::string &ns, uint32_t tabCount) const
 {
 	std::string dirPath(path);
 	if (!dirPath.empty())
@@ -36,7 +36,7 @@ void ProDef::write(const std::string &path, uint32_t tabCount) const
 	{
 		FILE *steadyFile = fopen(steadyFilePath.c_str(), "w+");
 		assert(NULL != steadyFile);
-		writeSteady(steadyFile, 0);
+		writeSteady(steadyFile, ns, 0);
 	}
 }
 
@@ -46,16 +46,23 @@ void ProDef::writeVolatile(FILE *destFile, uint32_t tabCount) const
 	writeMethods(destFile, tabCount);
 }
 
-void ProDef::writeSteady(FILE *destFile, uint32_t tabCount) const
+void ProDef::writeSteady(FILE *destFile, const std::string &ns, uint32_t tabCount) const
 {
 	std::string upperName;
 	std::transform(m_name.begin(), m_name.end(), std::back_inserter(upperName), toupper);
 	fprintf(destFile, "%s#ifndef %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "%s#define %s_H\n", TabString::get(tabCount), upperName.c_str());
 	fprintf(destFile, "\n");
+	fprintf(destFile, "%s#include <catman/net/SessionManager.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include <catman/net/Protocol.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include <catman/common/OctetsStream.h>\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%snamespace %s\n", TabString::get(tabCount), ns.c_str());
+		fprintf(destFile, "%s{\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "%sclass %s : public catman::net::Protocol\n", TabString::get(tabCount), m_name.c_str());
 	fprintf(destFile, "%s{\n", TabString::get(tabCount));
 	fprintf(destFile, "%s#include \"%s\"\n", TabString::get(tabCount + 1), m_name.c_str());
@@ -65,6 +72,11 @@ void ProDef::writeSteady(FILE *destFile, uint32_t tabCount) const
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
 	fprintf(destFile, "%s};\n", TabString::get(tabCount));
 	fprintf(destFile, "\n");
+	if (!ns.empty())
+	{
+		fprintf(destFile, "%s}\n", TabString::get(tabCount));
+		fprintf(destFile, "\n");
+	}
 	fprintf(destFile, "#endif\n");
 }
 
@@ -108,5 +120,10 @@ void ProDef::writeMethods(FILE *destFile, uint32_t tabCount) const
 		fprintf(destFile, "%sos >> %s;\n", TabString::get(tabCount + 2), it->name().c_str());
 	fprintf(destFile, "%sreturn os;\n", TabString::get(tabCount + 2));
 	fprintf(destFile, "%s}\n", TabString::get(tabCount + 1));
+}
+
+std::string ProDef::name() const
+{
+	return m_name;
 }
 
